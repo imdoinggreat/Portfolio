@@ -42,6 +42,9 @@
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5"
   },
+  "overrides": {
+    "@sanity/types": "3.99.0"
+  },
   "author": "张紫茹",
   "keywords": [
     "portfolio",
