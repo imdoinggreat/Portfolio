@@ -10,7 +10,7 @@ import {
 import { ChevronLeft, ChevronRight, Camera, X } from "lucide-react";
 import Image from "next/image";
 
-interface FilmFrame {
+export interface FilmFrame {
   id: string;
   title: string;
   category: string;
@@ -20,7 +20,7 @@ interface FilmFrame {
   details: string[];
 }
 
-const filmFrames: FilmFrame[] = [
+const FALLBACK_FILM_FRAMES: FilmFrame[] = [
   {
     id: "feishu-1",
     title: "商学院活动策划",
@@ -103,7 +103,17 @@ const filmFrames: FilmFrame[] = [
   },
 ];
 
-export function FilmRollGallery() {
+type FilmRollGalleryProps = {
+  /** 来自 Sanity；不传则使用内置示例数据 */
+  initialFrames?: FilmFrame[];
+};
+
+export function FilmRollGallery({ initialFrames }: FilmRollGalleryProps) {
+  const frames =
+    initialFrames && initialFrames.length > 0
+      ? initialFrames
+      : FALLBACK_FILM_FRAMES;
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedFrame, setSelectedFrame] = useState<FilmFrame | null>(null);
   const [direction, setDirection] = useState(0);
@@ -116,8 +126,8 @@ export function FilmRollGallery() {
     setDirection(newDirection);
     setCurrentIndex((prev) => {
       const next = prev + newDirection;
-      if (next < 0) return filmFrames.length - 1;
-      if (next >= filmFrames.length) return 0;
+      if (next < 0) return frames.length - 1;
+      if (next >= frames.length) return 0;
       return next;
     });
   };
@@ -127,7 +137,7 @@ export function FilmRollGallery() {
       paginate(1);
     }, 5000);
     return () => clearInterval(timer);
-  }, [currentIndex]);
+  }, [currentIndex, frames.length]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-honeydew-50/30 to-lychee-50/20 py-20">
@@ -183,8 +193,8 @@ export function FilmRollGallery() {
                 }}
               >
                 <FilmFrameCard
-                  frame={filmFrames[currentIndex]}
-                  onClick={() => setSelectedFrame(filmFrames[currentIndex])}
+                  frame={frames[currentIndex]}
+                  onClick={() => setSelectedFrame(frames[currentIndex])}
                 />
               </motion.div>
             </AnimatePresence>
@@ -204,7 +214,7 @@ export function FilmRollGallery() {
           </div>
 
           <div className="mt-8 flex gap-2 overflow-x-auto pb-4 scrollbar-hide">
-            {filmFrames.map((frame, index) => (
+            {frames.map((frame, index) => (
               <button
                 key={frame.id}
                 onClick={() => {
@@ -233,7 +243,7 @@ export function FilmRollGallery() {
           </div>
 
           <div className="flex justify-center gap-2 mt-6">
-            {filmFrames.map((_, index) => (
+            {frames.map((_, index) => (
               <button
                 key={index}
                 onClick={() => {

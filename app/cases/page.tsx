@@ -1,10 +1,11 @@
 import { FilmRollGallery } from "@/components/film-roll-gallery";
+import { getCaseStudies } from "@/lib/sanity/fetch";
 
-export default function CasesPage() {
+export default async function CasesPage() {
+  const frames = await getCaseStudies();
   return (
     <div className="min-h-screen">
-      <FilmRollGallery />
+      <FilmRollGallery initialFrames={frames} />
     </div>
   );
 }
-

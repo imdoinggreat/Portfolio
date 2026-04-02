@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { motion, type PanInfo } from "framer-motion";
 import Image from "next/image";
+import type { PhotographyItem } from "@/lib/sanity/types";
 
-const images = [
+const DEFAULT_IMAGES: PhotographyItem[] = [
   {
     id: 1,
     src: "https://images.unsplash.com/photo-1522163182402-834f871fd851?w=800&q=80",
@@ -45,11 +46,19 @@ const images = [
 type VerticalImageStackProps = {
   /** When true, avoids full viewport height so it can sit below other sections */
   embedded?: boolean;
+  /** 来自 Sanity；不传则使用内置示例 */
+  slides?: PhotographyItem[];
 };
 
 export function VerticalImageStack({
   embedded = false,
+  slides,
 }: VerticalImageStackProps) {
+  const images = useMemo(
+    () =>
+      slides && slides.length > 0 ? slides : DEFAULT_IMAGES,
+    [slides],
+  );
   const [currentIndex, setCurrentIndex] = useState(0);
   const lastNavigationTime = useRef(0);
   const navigationCooldown = 400;
