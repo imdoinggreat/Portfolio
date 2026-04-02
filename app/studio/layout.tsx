@@ -1,9 +1,3 @@
-import type { Metadata, Viewport } from "next";
-import { metadata as studioMetadata, viewport as studioViewport } from "next-sanity/studio";
-
-export const metadata: Metadata = studioMetadata;
-export const viewport: Viewport = studioViewport;
-
 export default function StudioLayout({
   children,
 }: {
