@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
+import { SiteHeader } from "@/components/site-header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,42 +32,7 @@ export default function RootLayout({
           />
         </div>
 
-        <nav className="fixed top-0 left-0 right-0 z-40 glass-morphism border-b border-honeydew-200/30">
-          <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-            <Link
-              href="/"
-              className="text-xl font-bold hover:text-honeydew-500 transition-colors"
-            >
-              张紫茹
-            </Link>
-            <div className="flex gap-6 text-sm">
-              <Link
-                href="/"
-                className="hover:text-honeydew-500 transition-colors"
-              >
-                首页
-              </Link>
-              <Link
-                href="/cases"
-                className="hover:text-honeydew-500 transition-colors"
-              >
-                作品集
-              </Link>
-              <Link
-                href="/photography"
-                className="hover:text-honeydew-500 transition-colors"
-              >
-                相机
-              </Link>
-              <a
-                href="mailto:3459613530@qq.com"
-                className="hover:text-honeydew-500 transition-colors"
-              >
-                联系
-              </a>
-            </div>
-          </div>
-        </nav>
+        <SiteHeader />
 
         <div className="pt-16">{children}</div>
       </body>

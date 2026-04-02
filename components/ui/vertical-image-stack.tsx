@@ -42,7 +42,14 @@ const images = [
   },
 ];
 
-export function VerticalImageStack() {
+type VerticalImageStackProps = {
+  /** When true, avoids full viewport height so it can sit below other sections */
+  embedded?: boolean;
+};
+
+export function VerticalImageStack({
+  embedded = false,
+}: VerticalImageStackProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const lastNavigationTime = useRef(0);
   const navigationCooldown = 400;
@@ -127,7 +134,13 @@ export function VerticalImageStack() {
   const currentImage = images[currentIndex];
 
   return (
-    <div className="relative flex h-screen w-full items-center justify-center overflow-hidden bg-gradient-to-b from-white via-honeydew-50/30 to-lychee-50/20">
+    <div
+      className={
+        embedded
+          ? "relative flex min-h-[min(90vh,820px)] w-full items-center justify-center overflow-hidden bg-gradient-to-b from-white via-honeydew-50/30 to-lychee-50/20 py-16"
+          : "relative flex h-screen w-full items-center justify-center overflow-hidden bg-gradient-to-b from-white via-honeydew-50/30 to-lychee-50/20"
+      }
+    >
       <div
         className="relative flex h-[500px] w-[320px] items-center justify-center"
         style={{ perspective: "1200px" }}
