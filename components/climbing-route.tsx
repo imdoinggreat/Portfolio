@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ExternalLink } from "lucide-react";
+import { ArrowRight, X, ExternalLink } from "lucide-react";
+import Link from "next/link";
 
 interface ClimbingHold {
   id: string;
@@ -11,7 +12,12 @@ interface ClimbingHold {
   type: "experience" | "project" | "milestone";
   title: string;
   subtitle: string;
+  /** Unified display format for periods */
   date: string;
+  role: string;
+  /** One line: why this case matters */
+  valueSummary: string;
+  caseSlug?: string;
   content: {
     description: string;
     achievements: string[];
@@ -22,15 +28,19 @@ interface ClimbingHold {
   difficulty: 1 | 2 | 3;
 }
 
+/** Order: strongest proof path — 字节 → BOSS → 美图 → 乾象 */
 const holds: ClimbingHold[] = [
   {
     id: "feishu",
-    x: 25,
-    y: 15,
+    x: 22,
+    y: 12,
     type: "experience",
     title: "字节跳动",
     subtitle: "飞书商业化",
-    date: "2025.09-12",
+    date: "Sep–Dec 2025",
+    role: "To B 营销 · 触达与转化",
+    valueSummary: "CRM + KDM 策略优化商学院场景触达与留资效率",
+    caseSlug: "feishu-b2b",
     content: {
       description:
         "负责顶级商学院（北大国发院、清华经管、清华五道口）To B营销，通过数据驱动与创新活动设计实现留资率提升",
@@ -46,13 +56,40 @@ const holds: ClimbingHold[] = [
     difficulty: 3,
   },
   {
-    id: "meitu",
+    id: "boss",
     x: 55,
-    y: 30,
+    y: 28,
+    type: "project",
+    title: "BOSS直聘",
+    subtitle: "游戏化营销",
+    date: "2024",
+    role: "用户研究 · 全案策划",
+    valueSummary: "用互动机制提升年轻用户参与与留资转化路径",
+    caseSlug: "boss-gamification",
+    content: {
+      description:
+        "为BOSS直聘设计游戏化职业体验营销方案，解决年轻求职者\"对岗位认知偏差\"核心痛点",
+      achievements: [
+        "6 组深度访谈 + 1000+ 应用评论分析",
+        "设计完整\"UGC内容 + 线上游戏 + 线下快闪\"全案",
+        "获得课程优秀评级，全年级答辩二等奖",
+      ],
+      tags: ["用户研究", "游戏化设计", "营销全案"],
+    },
+    color: "lychee",
+    difficulty: 2,
+  },
+  {
+    id: "meitu",
+    x: 74,
+    y: 46,
     type: "project",
     title: "美图云肩",
     subtitle: "国潮产品设计",
     date: "2024",
+    role: "洞察 · 产品叙事",
+    valueSummary: "从文化洞察到拼图与 AR 的可传播产品表达",
+    caseSlug: "meitu-yunjian",
     content: {
       description:
         "围绕非遗云肩文化，为美图秀秀设计创新产品功能，实现传统文化的年轻化、数字化表达",
@@ -68,12 +105,15 @@ const holds: ClimbingHold[] = [
   },
   {
     id: "qianxiang",
-    x: 75,
-    y: 50,
+    x: 32,
+    y: 66,
     type: "experience",
     title: "乾象投资",
     subtitle: "品牌公关",
-    date: "2025.01-04",
+    date: "Jan–Apr 2025",
+    role: "品牌公关 · 活动与舆情",
+    valueSummary: "大型年会体验与舆情日常，支撑稳健品牌表达",
+    caseSlug: "qianxiang-brand",
     content: {
       description: "参与200万元预算公司年会全流程，主导主题策划与供应商管理",
       achievements: [
@@ -84,27 +124,6 @@ const holds: ClimbingHold[] = [
       tags: ["大型活动", "舆情管理", "品牌传播"],
     },
     color: "mango",
-    difficulty: 2,
-  },
-  {
-    id: "boss",
-    x: 40,
-    y: 70,
-    type: "project",
-    title: "BOSS直聘",
-    subtitle: "游戏化营销",
-    date: "2024",
-    content: {
-      description:
-        "为BOSS直聘设计游戏化职业体验营销方案，解决年轻求职者\"对岗位认知偏差\"核心痛点",
-      achievements: [
-        "6 组深度访谈 + 1000+ 应用评论分析",
-        "设计完整\"UGC内容 + 线上游戏 + 线下快闪\"全案",
-        "获得课程优秀评级，全年级答辩二等奖",
-      ],
-      tags: ["用户研究", "游戏化设计", "营销全案"],
-    },
-    color: "lychee",
     difficulty: 2,
   },
 ];
@@ -124,12 +143,12 @@ export function ClimbingRoute() {
           我的攀登路线
         </motion.h2>
         <motion.p
-          className="text-foreground/60 text-lg"
+          className="text-foreground/60 text-lg max-w-xl mx-auto"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          每个岩点都是一次成长 · 点击查看详情
+          精选代表项目：先看公司、角色与一句话价值，再点开看摘要；完整拆解见案例页。
         </motion.p>
       </div>
 
@@ -186,10 +205,13 @@ export function ClimbingRoute() {
           />
         ))}
 
-        <div className="absolute bottom-8 left-8 glass-morphism rounded-xl p-4 space-y-2">
-          <div className="text-sm font-semibold text-foreground/80 mb-2">
-            攀岩难度
+        <div className="absolute bottom-8 left-8 glass-morphism rounded-xl p-4 space-y-2 max-w-[220px]">
+          <div className="text-sm font-semibold text-foreground/80 mb-1">
+            攀岩难度（辅助）
           </div>
+          <p className="text-[10px] text-foreground/50 leading-snug mb-2">
+            仅作个人成长隐喻，不等于项目含金量排序。
+          </p>
           {[
             { level: "V1", label: "基础", color: "bg-mango-200" },
             { level: "V2", label: "进阶", color: "bg-lychee-200" },
@@ -252,15 +274,18 @@ function ClimbingHoldButton({
 
   return (
     <motion.button
+      type="button"
+      aria-label={`${hold.title} ${hold.subtitle}，${hold.valueSummary}`}
       className={`
-        absolute w-32 h-32 rounded-full
+        absolute w-[9.5rem] min-h-[9.5rem] rounded-2xl
         ${colors.bg} ${colors.hover}
         shadow-soft backdrop-blur-sm
-        border-4 ${colors.border}
+        border-2 ${colors.border}
         cursor-pointer
-        flex flex-col items-center justify-center
+        flex flex-col items-stretch justify-between text-left
         transition-all duration-300
-        ${isActive ? `scale-110 ${colors.shadow} shadow-lg z-20` : "hover:scale-105 z-10"}
+        p-2.5 pt-2
+        ${isActive ? `scale-105 ${colors.shadow} shadow-lg z-20` : "hover:scale-[1.02] z-10"}
       `}
       style={{
         left: `${hold.x}%`,
@@ -276,18 +301,28 @@ function ClimbingHoldButton({
         damping: 15,
       }}
       onClick={onClick}
-      whileHover={{ rotate: [0, -3, 3, 0], transition: { duration: 0.3 } }}
-      whileTap={{ scale: 0.95 }}
+      whileHover={{ rotate: [0, -2, 2, 0], transition: { duration: 0.3 } }}
+      whileTap={{ scale: 0.97 }}
     >
-      <div className="text-center px-2">
-        <div className="text-[10px] font-bold text-foreground/70 uppercase tracking-wider">
-          {hold.date}
+      <div className="text-[9px] font-medium text-foreground/55 tabular-nums">
+        {hold.date}
+      </div>
+      <div>
+        <div className="text-sm font-bold leading-tight">{hold.title}</div>
+        <div className="text-[11px] text-foreground/75 mt-0.5 leading-tight">
+          {hold.subtitle}
         </div>
-        <div className="text-sm font-bold mt-1 leading-tight">{hold.title}</div>
-        <div className="text-xs text-foreground/70 mt-0.5">{hold.subtitle}</div>
-        <div className="text-[10px] font-mono font-bold mt-1 bg-white/50 rounded px-2 py-0.5">
-          V{hold.difficulty}
+        <div className="text-[9px] text-foreground/60 mt-1 leading-snug">
+          {hold.role}
         </div>
+        <p className="text-[9px] text-foreground/80 mt-1.5 leading-snug line-clamp-3">
+          {hold.valueSummary}
+        </p>
+      </div>
+      <div className="flex justify-end pt-1">
+        <span className="text-[9px] font-mono text-foreground/45">
+          Climb V{hold.difficulty}
+        </span>
       </div>
     </motion.button>
   );
@@ -321,10 +356,14 @@ function HoldDetailCard({
             <div>
               <h3 className="text-3xl font-bold mb-2">{hold.title}</h3>
               <p className="text-lg text-foreground/70">{hold.subtitle}</p>
-              <div className="flex items-center gap-3 mt-2">
+              <p className="text-sm text-foreground/65 mt-2">{hold.role}</p>
+              <p className="text-base text-foreground/85 mt-3 font-medium leading-snug">
+                {hold.valueSummary}
+              </p>
+              <div className="flex flex-wrap items-center gap-2 mt-3">
                 <span className="text-sm text-foreground/60">{hold.date}</span>
-                <span className="text-xs font-mono font-bold bg-foreground/10 rounded px-2 py-1">
-                  V{hold.difficulty}
+                <span className="text-[10px] font-mono text-foreground/45 bg-foreground/5 rounded px-2 py-0.5">
+                  Climb V{hold.difficulty}
                 </span>
               </div>
             </div>
@@ -369,14 +408,25 @@ function HoldDetailCard({
             ))}
           </div>
 
+          {hold.caseSlug && (
+            <Link
+              href={`/cases/${hold.caseSlug}`}
+              className="mt-6 w-full flex items-center justify-center gap-2 bg-honeydew-200 hover:bg-honeydew-300 text-foreground font-semibold py-3 rounded-lg transition-colors"
+              onClick={onClose}
+            >
+              阅读完整案例拆解
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          )}
+
           {hold.content.link && (
             <a
               href={hold.content.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 w-full flex items-center justify-center gap-2 bg-honeydew-200 hover:bg-honeydew-300 text-foreground font-semibold py-3 rounded-lg transition-colors"
+              className="mt-3 w-full flex items-center justify-center gap-2 border-2 border-honeydew-200 hover:bg-honeydew-50 text-foreground font-semibold py-3 rounded-lg transition-colors"
             >
-              查看完整案例
+              外部链接
               <ExternalLink className="w-4 h-4" />
             </a>
           )}

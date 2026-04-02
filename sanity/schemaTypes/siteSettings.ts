@@ -18,6 +18,12 @@ export const siteSettingsType = defineType({
       initialValue: "数据驱动 · 创意传播",
     }),
     defineField({
+      name: "heroKeywordChips",
+      title: "首页职业关键词（小标签，如 User Insight）",
+      type: "array",
+      of: [defineArrayMember({ type: "string" })],
+    }),
+    defineField({
       name: "heroSlides",
       title: "首页环绕图（Circular）",
       type: "array",
@@ -88,7 +94,12 @@ export const siteSettingsType = defineType({
           name: "stat",
           fields: [
             defineField({ name: "number", title: "数字", type: "string" }),
-            defineField({ name: "label", title: "说明", type: "string" }),
+            defineField({ name: "label", title: "短说明", type: "string" }),
+            defineField({
+              name: "context",
+              title: "语义补充（证据一句话）",
+              type: "string",
+            }),
           ],
         }),
       ],
@@ -125,6 +136,12 @@ export const siteSettingsType = defineType({
       name: "resumePath",
       title: "简历站内路径（若不用完整 URL，可填此项，如 /resume.pdf）",
       type: "string",
+    }),
+    defineField({
+      name: "resumeButtonLabel",
+      title: "简历按钮文案",
+      type: "string",
+      initialValue: "下载简历（PDF）",
     }),
     defineField({
       name: "footerLine1",

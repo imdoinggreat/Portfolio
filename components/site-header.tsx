@@ -13,7 +13,7 @@ const navItems: NavItem[] = [
     id: "contact",
     icon: <Mail />,
     label: "联系",
-    href: "mailto:3459613530@qq.com",
+    href: "/#contact",
   },
 ];
 

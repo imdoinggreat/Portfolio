@@ -18,17 +18,19 @@ const siteSettingsQuery = groq`
   *[_type == "siteSettings" && _id == "siteSettings"][0]{
     heroName,
     heroTagline,
+    heroKeywordChips,
     heroSlides[]{ text, image },
     aboutTitle,
     aboutBody,
     highlights[]{ icon, title, description },
-    stats[]{ number, label },
+    stats[]{ number, label, context },
     contactTitle,
     contactBlurb,
     contactEmail,
     contactPhone,
     resumeUrl,
     resumePath,
+    resumeButtonLabel,
     footerLine1,
     footerLine2
   }
@@ -60,6 +62,7 @@ type RawHeroSlide = { text?: string; image?: Image };
 type RawSite = Partial<{
   heroName: string;
   heroTagline: string;
+  heroKeywordChips: string[];
   heroSlides: RawHeroSlide[];
   aboutTitle: string;
   aboutBody: string;
@@ -71,6 +74,7 @@ type RawSite = Partial<{
   contactPhone: string;
   resumeUrl: string;
   resumePath?: string;
+  resumeButtonLabel: string;
   footerLine1: string;
   footerLine2: string;
 }> | null;
@@ -87,12 +91,31 @@ function mapHeroSlides(slides: RawHeroSlide[] | undefined): HeroSlide[] {
   return mapped.length ? mapped : defaultHomeContent.heroSlides;
 }
 
+function mergeStats(
+  raw: HomeContent["stats"] | undefined | null,
+  base: HomeContent["stats"],
+): HomeContent["stats"] {
+  if (!raw?.length) return base;
+  return raw.map((s, i) => ({
+    number: s.number?.trim() ? s.number : base[i]?.number ?? s.number,
+    label: s.label?.trim() ? s.label : base[i]?.label ?? s.label,
+    context:
+      s.context?.trim() ||
+      base[i]?.context ||
+      undefined,
+  }));
+}
+
 function mergeHome(raw: RawSite): HomeContent {
   const base = defaultHomeContent;
   if (!raw) return base;
   return {
     heroName: raw.heroName || base.heroName,
     heroTagline: raw.heroTagline || base.heroTagline,
+    heroKeywordChips:
+      raw.heroKeywordChips && raw.heroKeywordChips.length > 0
+        ? raw.heroKeywordChips.filter(Boolean)
+        : base.heroKeywordChips,
     heroSlides: mapHeroSlides(raw.heroSlides),
     aboutTitle: raw.aboutTitle || base.aboutTitle,
     aboutBody: raw.aboutBody?.trim() ? raw.aboutBody : base.aboutBody,
@@ -100,7 +123,7 @@ function mergeHome(raw: RawSite): HomeContent {
       raw.highlights && raw.highlights.length > 0
         ? raw.highlights
         : base.highlights,
-    stats: raw.stats && raw.stats.length > 0 ? raw.stats : base.stats,
+    stats: mergeStats(raw.stats, base.stats),
     contactTitle: raw.contactTitle || base.contactTitle,
     contactBlurb: raw.contactBlurb?.trim()
       ? raw.contactBlurb
@@ -111,6 +134,8 @@ function mergeHome(raw: RawSite): HomeContent {
       (typeof raw.resumeUrl === "string" && raw.resumeUrl) ||
       (raw.resumePath?.trim() ? raw.resumePath.trim() : "") ||
       base.resumeUrl,
+    resumeButtonLabel:
+      raw.resumeButtonLabel?.trim() || base.resumeButtonLabel,
     footerLine1: raw.footerLine1 || base.footerLine1,
     footerLine2: raw.footerLine2 || base.footerLine2,
   };
