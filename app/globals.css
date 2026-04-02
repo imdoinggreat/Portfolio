@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 215 16% 27%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 16% 27%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 16% 27%;
+
+    --primary: 158 48% 89%;
+    --primary-foreground: 158 46% 21%;
+
+    --secondary: 338 100% 95%;
+    --secondary-foreground: 338 47% 30%;
+
+    --muted: 39 100% 90%;
+    --muted-foreground: 39 36% 34%;
+
+    --accent: 158 48% 89%;
+    --accent-foreground: 158 46% 21%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 158 48% 89%;
+    --input: 158 48% 89%;
+    --ring: 158 48% 89%;
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* 自定义滚动条 - 柔和风格 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(213, 242, 232, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(213, 242, 232, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(213, 242, 232, 0.7);
+}
+
+/* 选中文本颜色 */
+::selection {
+  background: rgba(213, 242, 232, 0.4);
+  color: inherit;
+}
+
+/* 胶片效果 */
+.film-grain {
+  position: relative;
+}
+
+.film-grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+}
+
+/* 攀岩路线特效 */
+@keyframes climb-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.climbing-hold {
+  animation: climb-pulse 2s ease-in-out infinite;
+}
+
+/* 相机胶卷穿孔效果 */
+.film-perforation {
+  background-image: radial-gradient(
+    circle,
+    transparent 40%,
+    rgba(0, 0, 0, 0.1) 40%,
+    rgba(0, 0, 0, 0.1) 60%,
+    transparent 60%
+  );
+  background-size: 20px 20px;
+  background-position: 0 0;
+}
+
+/* 玻璃态效果增强 */
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
