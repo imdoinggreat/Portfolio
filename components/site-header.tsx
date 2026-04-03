@@ -2,25 +2,22 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Camera, FolderKanban, Home, Mail } from "lucide-react";
+import { Camera, FolderKanban, Home, Mail, Cpu } from "lucide-react";
 import { LimelightNav, type NavItem } from "@/components/ui/limelight-nav";
 
 const navItems: NavItem[] = [
   { id: "home", icon: <Home />, label: "首页", href: "/" },
   { id: "cases", icon: <FolderKanban />, label: "作品集", href: "/cases" },
-  { id: "photo", icon: <Camera />, label: "相机", href: "/photography" },
-  {
-    id: "contact",
-    icon: <Mail />,
-    label: "联系",
-    href: "/#contact",
-  },
+  { id: "skills", icon: <Cpu />, label: "技能", href: "/skills" },
+  { id: "photo", icon: <Camera />, label: "摄影", href: "/photography" },
+  { id: "contact", icon: <Mail />, label: "联系", href: "/#contact" },
 ];
 
 function activeIndexFromPath(pathname: string): number {
   if (pathname === "/") return 0;
   if (pathname.startsWith("/cases")) return 1;
-  if (pathname.startsWith("/photography")) return 2;
+  if (pathname.startsWith("/skills")) return 2;
+  if (pathname.startsWith("/photography")) return 3;
   return 0;
 }
 
@@ -30,7 +27,7 @@ export function SiteHeader() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-40 glass-morphism border-b border-editorial-title/8">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
+      <div className="container mx-auto px-4 h-[72px] flex items-center justify-between gap-4">
         <Link
           href="/"
           className="text-xl font-semibold text-editorial-title hover:text-editorial-accent transition-colors shrink-0 tracking-tight"

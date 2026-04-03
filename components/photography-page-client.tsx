@@ -1,7 +1,6 @@
 "use client";
 
 import StackedPanels from "@/components/ui/stacked-panels-cursor-interactive-component";
-import { WavePath } from "@/components/ui/wave-path";
 import { VerticalImageStack } from "@/components/ui/vertical-image-stack";
 import type { PhotographyItem } from "@/lib/sanity/types";
 
@@ -46,13 +45,6 @@ export function PhotographyPageClient({ slides }: PhotographyPageClientProps) {
         className="pointer-events-none h-14 sm:h-20 w-full bg-gradient-to-b from-editorial-card via-editorial-canvas to-editorial-canvas"
         aria-hidden
       />
-
-      <div className="flex flex-col items-center gap-4 px-4 pt-2 pb-14 sm:pb-16 bg-gradient-to-b from-editorial-canvas via-editorial-canvas to-editorial-card/80">
-        <WavePath />
-        <p className="text-sm text-editorial-muted text-center max-w-md">
-          在分割线上移动鼠标，感受波浪形反馈
-        </p>
-      </div>
 
       <VerticalImageStack embedded slides={slides} />
     </div>

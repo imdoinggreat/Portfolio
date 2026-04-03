@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, X, ExternalLink } from "lucide-react";
 import Link from "next/link";
@@ -13,8 +13,9 @@ interface CareerNode {
   date: string;
   role: string;
   valueSummary: string;
-  /** Short quantified result (optional) */
   metric?: string;
+  logoUrl?: string;
+  logoColor?: string;
   caseSlug?: string;
   content: {
     description: string;
@@ -30,6 +31,7 @@ const nodes: CareerNode[] = [
     id: "feishu",
     title: "字节跳动",
     subtitle: "飞书商业化",
+    logoColor: "#3370FF",
     date: "Sep–Dec 2025",
     role: "To B 营销 · 触达与转化",
     valueSummary: "CRM + KDM 策略优化商学院场景触达与留资效率",
@@ -51,6 +53,7 @@ const nodes: CareerNode[] = [
     id: "boss",
     title: "BOSS直聘",
     subtitle: "游戏化营销",
+    logoColor: "#FF6B35",
     date: "2024",
     role: "用户研究 · 全案策划",
     valueSummary: "用互动机制提升年轻用户参与与留资转化路径",
@@ -71,6 +74,7 @@ const nodes: CareerNode[] = [
     id: "meitu",
     title: "美图云肩",
     subtitle: "国潮产品设计",
+    logoColor: "#FF4080",
     date: "2024",
     role: "洞察 · 产品叙事",
     valueSummary: "从文化洞察到拼图与 AR 的可传播产品表达",
@@ -91,6 +95,7 @@ const nodes: CareerNode[] = [
     id: "qianxiang",
     title: "乾象投资",
     subtitle: "品牌公关",
+    logoColor: "#1E2430",
     date: "Jan–Apr 2025",
     role: "品牌公关 · 活动与舆情",
     valueSummary: "大型年会体验与舆情日常，支撑稳健品牌表达",
@@ -108,13 +113,52 @@ const nodes: CareerNode[] = [
   },
 ];
 
+// ── Position tables ──────────────────────────────────────────────
+// Stack: index 0 = front card (top-left), cascades right-down
+const STACK = [
+  { x: 0,  y: 0,  rotate: 0,   scale: 1.00, zIndex: 4 },
+  { x: 26, y: 18, rotate: 2.5, scale: 0.97, zIndex: 3 },
+  { x: 52, y: 36, rotate: 5,   scale: 0.94, zIndex: 2 },
+  { x: 78, y: 54, rotate: 7.5, scale: 0.91, zIndex: 1 },
+];
+
+// Scatter: 2 × 2 grid, slight organic offsets
+const SCATTER = [
+  { x: 0,   y: 0,   rotate: -2,   scale: 1, zIndex: 4 }, // top-left
+  { x: 330, y: 18,  rotate:  2,   scale: 1, zIndex: 3 }, // top-right
+  { x: 18,  y: 258, rotate:  1.5, scale: 1, zIndex: 2 }, // bottom-left
+  { x: 348, y: 240, rotate: -1.5, scale: 1, zIndex: 1 }, // bottom-right
+];
+
+const CARD_W = 305;  // px, matches w-[305px] below
+const CARD_H = 232;  // approximate rendered height
+const GAP    = 20;
+
+// Container sizes
+const STACK_SIZE   = { w: CARD_W + 78 + 20, h: CARD_H + 54 + 20 }; // + max offsets + padding
+const SCATTER_SIZE = { w: CARD_W * 2 + GAP + 48, h: CARD_H * 2 + GAP + 18 };
+
+// ── Component ────────────────────────────────────────────────────
 export function CareerTrajectory() {
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [activeId, setActiveId]     = useState<string | null>(null);
+  const [isMobile, setIsMobile]     = useState(false);
   const selected = nodes.find((n) => n.id === activeId);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  const containerW = isExpanded ? SCATTER_SIZE.w : STACK_SIZE.w;
+  const containerH = isExpanded ? SCATTER_SIZE.h : STACK_SIZE.h;
 
   return (
     <div className="container mx-auto px-4 py-16 md:py-20">
-      <div className="text-center mb-12 md:mb-14 max-w-2xl mx-auto">
+      {/* Section heading */}
+      <div className="text-center mb-14 max-w-2xl mx-auto">
         <p className="text-[11px] sm:text-xs font-medium tracking-[0.2em] uppercase text-editorial-muted mb-3">
           Career trajectory · Selected experience
         </p>
@@ -122,75 +166,182 @@ export function CareerTrajectory() {
           职业路径 / 关键节点
         </h2>
         <p className="text-sm sm:text-base text-editorial-body leading-relaxed">
-          横向时间轴：时间、组织、职能与一句话价值；点击卡片查看摘要，完整拆解见案例页。
+          悬停展开卡片 · 点击查看完整详情
         </p>
       </div>
 
-      <div className="relative max-w-6xl mx-auto">
-        <div
-          className="flex flex-col lg:flex-row lg:justify-start gap-4 lg:gap-6 lg:overflow-x-auto lg:pb-4 lg:pt-2 lg:snap-x lg:snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-          style={{ scrollbarWidth: "none" }}
-        >
-          {nodes.map((node, index) => (
-            <motion.button
-              key={node.id}
-              type="button"
-              onClick={() => setActiveId(node.id)}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.06 }}
-              className={cn(
-                "text-left w-full lg:w-[min(260px,80vw)] lg:flex-shrink-0 lg:snap-center",
-                "rounded-lg border border-editorial-title/10 bg-editorial-card",
-                "pl-5 pr-4 py-4 sm:py-5",
-                "border-l-[3px] border-l-editorial-title/15",
-                "transition-all duration-200",
-                "hover:border-editorial-accent/40 hover:bg-white hover:shadow-soft hover:border-l-editorial-accent/50",
-                "focus:outline-none focus-visible:ring-2 focus-visible:ring-editorial-accent/35 focus-visible:ring-offset-2 focus-visible:ring-offset-editorial-canvas",
-              )}
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <span
-                  className="h-1.5 w-1.5 rounded-full bg-editorial-title/25 ring-4 ring-editorial-title/[0.04]"
-                  aria-hidden
-                />
-                <time className="text-[11px] font-mono tabular-nums text-editorial-muted">
-                  {node.date}
-                </time>
-              </div>
-              <h3 className="text-base font-semibold text-editorial-title leading-snug">
-                {node.title}
-              </h3>
-              <p className="text-xs text-editorial-muted mt-0.5">{node.subtitle}</p>
-              <p className="text-[11px] text-editorial-body/90 mt-2 leading-snug">
-                {node.role}
-              </p>
-              <p className="text-sm text-editorial-body mt-3 leading-relaxed line-clamp-3">
-                {node.valueSummary}
-              </p>
-              {node.metric && (
-                <p className="mt-3 pt-3 border-t border-editorial-title/[0.06] text-xs font-medium text-editorial-title/85 tabular-nums">
-                  {node.metric}
-                </p>
-              )}
-            </motion.button>
-          ))}
+      {/* ── Desktop deck (hidden on mobile) ── */}
+      <div className="hidden sm:flex justify-center">
+        <div className="flex flex-col items-center">
+          {/* Outer hover zone — sized to contain all card states */}
+          <motion.div
+            className="relative cursor-default"
+            style={{ perspective: 1200 }}
+            animate={{ width: containerW, height: containerH }}
+            transition={{ type: "spring", stiffness: 260, damping: 30 }}
+            onMouseEnter={() => setIsExpanded(true)}
+            onMouseLeave={() => setIsExpanded(false)}
+          >
+            {nodes.map((node, index) => {
+              const pos  = isExpanded ? SCATTER[index] : STACK[index];
+              const isFront = index === 0;
+
+              return (
+                <motion.div
+                  key={node.id}
+                  className={cn(
+                    "absolute select-none cursor-pointer",
+                    "flex flex-col rounded-2xl",
+                    "border border-editorial-title/10 bg-editorial-card/95 backdrop-blur-sm",
+                    "px-5 py-4",
+                  )}
+                  style={{ width: CARD_W, originX: 0.5, originY: 0.5 }}
+                  animate={{
+                    x:      pos.x,
+                    y:      pos.y,
+                    rotate: pos.rotate,
+                    scale:  pos.scale,
+                    zIndex: pos.zIndex,
+                    // 3D depth: back cards tilt slightly into the page in stack mode
+                    rotateX: !isExpanded && index > 0 ? index * 1.5 : 0,
+                    boxShadow: isExpanded
+                      ? "0 8px 32px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06)"
+                      : isFront
+                        ? "0 16px 40px rgba(0,0,0,0.13), 0 2px 8px rgba(0,0,0,0.08)"
+                        : `0 ${4 + index * 2}px ${8 + index * 4}px rgba(0,0,0,0.07)`,
+                  }}
+                  whileHover={isExpanded ? {
+                    y:      pos.y - 14,
+                    scale:  1.03,
+                    rotate: pos.rotate * 0.4,
+                    zIndex: 10,
+                    boxShadow: "0 24px 56px rgba(0,0,0,0.18), 0 4px 12px rgba(0,0,0,0.10)",
+                    transition: { type: "spring", stiffness: 320, damping: 22 },
+                  } : undefined}
+                  transition={{ type: "spring", stiffness: 260, damping: 26, delay: index * 0.03 }}
+                  onClick={() => setActiveId(node.id)}
+                >
+                  {/* Dim overlay for back cards in stack mode */}
+                  <AnimatePresence>
+                    {!isExpanded && index > 0 && (
+                      <motion.div
+                        className="absolute inset-0 rounded-2xl pointer-events-none bg-editorial-canvas/35"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0, transition: { duration: 0.15 } }}
+                      />
+                    )}
+                  </AnimatePresence>
+
+                  {/* Card header */}
+                  <div className="flex items-start gap-3 mb-3">
+                    <div
+                      className="h-10 w-10 rounded-xl shrink-0 flex items-center justify-center text-white text-sm font-bold shadow-sm"
+                      style={{ backgroundColor: node.logoColor ?? "#8B93A1" }}
+                    >
+                      {node.logoUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={node.logoUrl} alt={node.title} className="w-full h-full object-cover rounded-xl" />
+                      ) : (
+                        <span>{node.title.slice(0, 1)}</span>
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-sm font-semibold text-editorial-title leading-snug">
+                        {node.title}
+                      </h3>
+                      <p className="text-[11px] text-editorial-muted">{node.subtitle}</p>
+                    </div>
+                    <time className="text-[10px] font-mono tabular-nums text-editorial-muted shrink-0">
+                      {node.date}
+                    </time>
+                  </div>
+
+                  <p className="text-[11px] text-editorial-accent font-medium mb-2 leading-snug">
+                    {node.role}
+                  </p>
+                  <p className="text-sm text-editorial-body leading-relaxed line-clamp-2 flex-1">
+                    {node.valueSummary}
+                  </p>
+
+                  {node.metric && (
+                    <p className="mt-3 pt-3 border-t border-editorial-title/[0.06] text-xs font-medium text-editorial-title/80 tabular-nums">
+                      {node.metric}
+                    </p>
+                  )}
+
+                  {/* Click hint */}
+                  <motion.p
+                    className="mt-2 text-[10px] text-editorial-muted/50 text-right"
+                    animate={{ opacity: isExpanded ? 0.8 : isFront ? 0.5 : 0 }}
+                  >
+                    点击查看详情 →
+                  </motion.p>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+
+          <p className="text-[11px] text-editorial-muted mt-5 text-center">
+            悬停展开 · 点击查看详情 · Evidence
+          </p>
         </div>
       </div>
 
+      {/* ── Mobile: vertical card list (always visible) ── */}
+      <div className="flex sm:hidden flex-col gap-4 max-w-sm mx-auto">
+        {nodes.map((node, index) => (
+          <motion.div
+            key={node.id}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.08 }}
+            className={cn(
+              "cursor-pointer flex flex-col rounded-2xl",
+              "border border-editorial-title/10 bg-editorial-card/95",
+              "px-5 py-4 shadow-soft",
+            )}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => setActiveId(node.id)}
+          >
+            <div className="flex items-start gap-3 mb-3">
+              <div
+                className="h-10 w-10 rounded-xl shrink-0 flex items-center justify-center text-white text-sm font-bold shadow-sm"
+                style={{ backgroundColor: node.logoColor ?? "#8B93A1" }}
+              >
+                <span>{node.title.slice(0, 1)}</span>
+              </div>
+              <div className="min-w-0 flex-1">
+                <h3 className="text-sm font-semibold text-editorial-title">{node.title}</h3>
+                <p className="text-[11px] text-editorial-muted">{node.subtitle}</p>
+              </div>
+              <time className="text-[10px] font-mono tabular-nums text-editorial-muted shrink-0">
+                {node.date}
+              </time>
+            </div>
+            <p className="text-[11px] text-editorial-accent font-medium mb-2">{node.role}</p>
+            <p className="text-sm text-editorial-body leading-relaxed line-clamp-2">{node.valueSummary}</p>
+            {node.metric && (
+              <p className="mt-3 pt-3 border-t border-editorial-title/[0.06] text-xs font-medium text-editorial-title/80 tabular-nums">
+                {node.metric}
+              </p>
+            )}
+          </motion.div>
+        ))}
+      </div>
+
+      {/* ── Detail modal ── */}
       <AnimatePresence>
         {selected && (
-          <NodeDetailModal
-            node={selected}
-            onClose={() => setActiveId(null)}
-          />
+          <NodeDetailModal node={selected} onClose={() => setActiveId(null)} />
         )}
       </AnimatePresence>
     </div>
   );
 }
 
+// ── Modal (unchanged from original) ─────────────────────────────
 function NodeDetailModal({
   node,
   onClose,
@@ -216,22 +367,33 @@ function NodeDetailModal({
       >
         <div className="bg-editorial-card border border-editorial-title/10 rounded-2xl p-6 sm:p-8 shadow-soft-lg">
           <div className="flex justify-between items-start gap-4 mb-6">
-            <div>
-              <h3 className="text-2xl sm:text-3xl font-semibold text-editorial-title">
-                {node.title}
-              </h3>
-              <p className="text-editorial-muted mt-1">{node.subtitle}</p>
-              <p className="text-sm text-editorial-body mt-2">{node.role}</p>
-              <p className="text-sm text-editorial-title mt-3 font-medium leading-snug">
-                {node.valueSummary}
-              </p>
-              <div className="flex flex-wrap items-center gap-2 mt-3">
-                <span className="text-xs font-mono text-editorial-muted">
-                  {node.date}
-                </span>
-                {node.metric && (
-                  <span className="text-xs text-editorial-body">{node.metric}</span>
+            <div className="flex items-start gap-4">
+              <div
+                className="h-12 w-12 rounded-xl shrink-0 flex items-center justify-center overflow-hidden text-white text-base font-bold"
+                style={{ backgroundColor: node.logoColor ?? "#8B93A1" }}
+              >
+                {node.logoUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={node.logoUrl} alt={node.title} className="w-full h-full object-cover" />
+                ) : (
+                  <span>{node.title.slice(0, 1)}</span>
                 )}
+              </div>
+              <div>
+                <h3 className="text-2xl sm:text-3xl font-semibold text-editorial-title">
+                  {node.title}
+                </h3>
+                <p className="text-editorial-muted mt-1">{node.subtitle}</p>
+                <p className="text-sm text-editorial-body mt-2">{node.role}</p>
+                <p className="text-sm text-editorial-title mt-3 font-medium leading-snug">
+                  {node.valueSummary}
+                </p>
+                <div className="flex flex-wrap items-center gap-2 mt-3">
+                  <span className="text-xs font-mono text-editorial-muted">{node.date}</span>
+                  {node.metric && (
+                    <span className="text-xs text-editorial-body">{node.metric}</span>
+                  )}
+                </div>
               </div>
             </div>
             <button
@@ -254,10 +416,7 @@ function NodeDetailModal({
             </h4>
             <ul className="space-y-2">
               {node.content.achievements.map((achievement, i) => (
-                <li
-                  key={i}
-                  className="flex items-start gap-3 text-sm text-editorial-body"
-                >
+                <li key={i} className="flex items-start gap-3 text-sm text-editorial-body">
                   <span className="mt-2 h-px w-3 bg-editorial-accent/35 shrink-0" />
                   <span>{achievement}</span>
                 </li>

@@ -137,18 +137,23 @@ export const LimelightNav = ({
 
   return (
     <nav
-      className={`relative inline-flex items-center h-14 rounded-xl bg-card text-foreground border border-border px-2 shadow-soft ${className ?? ""}`}
+      className={`relative inline-flex items-center h-16 rounded-xl bg-card text-foreground border border-border px-1 shadow-soft ${className ?? ""}`}
     >
       {items.map(({ id, icon, label, onClick, href }, index) => {
         const target = href ?? "#";
         const isExternal =
           target.startsWith("http") || target.startsWith("mailto:");
-        const sharedClass = `relative z-20 flex h-full cursor-pointer items-center justify-center p-4 ${iconContainerClassName ?? ""}`;
+        const sharedClass = `relative z-20 flex h-full cursor-pointer flex-col items-center justify-center gap-1 px-4 py-1 ${iconContainerClassName ?? ""}`;
         const iconNode = cloneElement(icon, {
-          className: `w-6 h-6 transition-opacity duration-200 ease-in-out ${
+          className: `w-5 h-5 transition-opacity duration-200 ease-in-out ${
             activeIndex === index ? "opacity-100" : "opacity-40"
           } ${icon.props.className ?? ""} ${iconClassName ?? ""}`,
         });
+        const labelNode = label ? (
+          <span className={`text-[10px] font-medium leading-none transition-opacity duration-200 ${activeIndex === index ? "opacity-90" : "opacity-35"}`}>
+            {label}
+          </span>
+        ) : null;
 
         if (isExternal) {
           return (
@@ -163,6 +168,7 @@ export const LimelightNav = ({
               aria-label={label}
             >
               {iconNode}
+              {labelNode}
             </a>
           );
         }
@@ -180,6 +186,7 @@ export const LimelightNav = ({
             aria-label={label}
           >
             {iconNode}
+            {labelNode}
           </Link>
         );
       })}

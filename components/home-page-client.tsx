@@ -1,15 +1,18 @@
 "use client";
 
 import { CareerTrajectory } from "@/components/career-trajectory";
-import { CircularRevealHeading } from "@/components/ui/circular-reveal-heading";
+import { FallingPattern } from "@/components/ui/falling-pattern";
 import { GlowCard } from "@/components/ui/spotlight-card";
+import { VinylRecord } from "@/components/ui/vinyl-record";
 import type { HomeContent } from "@/lib/sanity/types";
 import { motion } from "framer-motion";
 import {
   ArrowDown,
   Download,
   FileText,
+  Github,
   Mail,
+  MessageCircle,
   UserRound,
 } from "lucide-react";
 import Link from "next/link";
@@ -24,94 +27,163 @@ export function HomePageClient({ content }: HomePageClientProps) {
 
   return (
     <main className="min-h-screen w-full bg-editorial-canvas">
-      <section className="h-screen flex flex-col items-center justify-center relative px-4">
-        <CircularRevealHeading
-          items={content.heroSlides}
-          centerText={
-            <div className="text-center">
-              <div className="text-[9px] sm:text-[10px] tracking-[0.28em] uppercase text-[#A8A5A0]">
-                Portfolio
-              </div>
-              <h1 className="text-lg sm:text-xl md:text-2xl font-semibold tracking-tight mt-1.5 leading-tight text-[#E8E4DF]">
-                {content.heroName}
-              </h1>
-              <p className="text-[11px] sm:text-xs mt-2 leading-snug text-[#B8B3AC] font-normal">
-                {content.heroTagline}
-              </p>
-            </div>
-          }
-          size="md"
+      {/* ── Hero ── */}
+      <section className="min-h-screen flex items-center relative px-6 sm:px-10 overflow-hidden">
+        {/* Subtle paper texture + falling dots background */}
+        <FallingPattern
+          color="rgba(158,158,244,0.45)"
+          backgroundColor="#F8F8FF"
+          duration={200}
+          blurIntensity="0.9em"
+          density={1}
+          className="absolute inset-0 z-0 [mask-image:radial-gradient(ellipse_80%_80%_at_40%_50%,transparent_25%,#F8F8FF_70%)]"
         />
 
-        {content.heroKeywordChips.length > 0 && (
+        {/* Warm spotlight from top-left */}
+        <div
+          className="absolute top-0 left-0 w-[60vw] h-[60vh] pointer-events-none z-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at 20% 10%, rgba(232,182,135,0.12) 0%, transparent 65%)",
+          }}
+        />
+
+        {/* Inner layout: record left + text right on desktop, stacked on mobile */}
+        <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 py-24 lg:py-0">
+
+          {/* ── Vinyl record column ── */}
           <motion.div
-            className="flex flex-wrap justify-center gap-2 mt-6 max-w-lg"
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35 }}
-            aria-label="职业关键词"
+            className="flex-shrink-0 flex justify-center lg:justify-start"
+            initial={{ opacity: 0, x: -24 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
-            {content.heroKeywordChips.map((chip) => (
-              <span
-                key={chip}
-                className="text-[11px] sm:text-xs px-2.5 py-1 rounded-full border border-editorial-title/10 bg-white/80 text-editorial-body font-medium tracking-wide"
-              >
-                {chip}
-              </span>
-            ))}
+            <VinylRecord
+              name={content.heroName}
+              tagline="数据驱动 · 创意传播"
+              size="md"
+              className="lg:-translate-x-4"
+            />
           </motion.div>
-        )}
 
-        <motion.div
-          className="flex flex-col items-center gap-4 mt-10 w-full max-w-md"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-        >
-          <div className="flex flex-col sm:flex-row gap-3 w-full justify-center">
-            <Link
-              href="#projects"
-              className="px-6 py-3 bg-editorial-title text-white rounded-lg font-medium transition-opacity hover:opacity-90 flex items-center justify-center gap-2 shadow-soft"
-            >
-              <FileText className="w-4 h-4 shrink-0" />
-              查看代表项目
-            </Link>
-            <a
-              href={resumeHref}
-              download
-              className="px-6 py-3 bg-editorial-card border border-editorial-title/12 rounded-lg font-medium transition-colors hover:border-editorial-accent/40 flex items-center justify-center gap-2 text-editorial-title"
-            >
-              <Download className="w-4 h-4 shrink-0" />
-              {resumeLabel}
-            </a>
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 text-sm text-editorial-muted">
-            <Link
-              href="#about"
-              className="inline-flex items-center gap-1.5 hover:text-editorial-accent transition-colors"
-            >
-              <UserRound className="w-3.5 h-3.5" />
-              了解我
-            </Link>
-            <span className="text-editorial-muted/40 hidden sm:inline" aria-hidden>
-              ·
-            </span>
-            <Link
-              href="#contact"
-              className="inline-flex items-center gap-1.5 hover:text-editorial-accent transition-colors"
-            >
-              <Mail className="w-3.5 h-3.5" />
-              联系我
-            </Link>
-          </div>
-        </motion.div>
+          {/* ── Text column ── */}
+          <div className="flex flex-col items-center lg:items-start text-center lg:text-left gap-6 max-w-lg">
 
+            {/* Eyebrow */}
+            <motion.p
+              className="text-[10px] tracking-[0.3em] uppercase text-editorial-muted font-medium"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+            >
+              Portfolio · 作品集
+            </motion.p>
+
+            {/* Name — primary visual anchor */}
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25, duration: 0.6 }}
+            >
+              <h1
+                className="font-semibold tracking-tight text-editorial-title leading-none"
+                style={{ fontSize: "clamp(2.6rem, 6vw, 4rem)" }}
+              >
+                {content.heroName}
+              </h1>
+              <p className="mt-3 text-base sm:text-lg text-editorial-body leading-relaxed">
+                {content.heroTagline}
+              </p>
+            </motion.div>
+
+            {/* Horizontal keyword chips */}
+            {content.heroKeywordChips.length > 0 && (
+              <motion.div
+                className="flex flex-wrap justify-center lg:justify-start gap-2"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.38 }}
+                aria-label="职业关键词"
+              >
+                {content.heroKeywordChips.map((chip) => (
+                  <span
+                    key={chip}
+                    className="text-[11px] sm:text-xs px-3 py-1.5 rounded-full border border-editorial-accent/25 bg-white/70 text-editorial-body font-medium tracking-wide backdrop-blur-sm shadow-sm hover:border-editorial-accent/50 hover:bg-white transition-all duration-200"
+                  >
+                    {chip}
+                  </span>
+                ))}
+              </motion.div>
+            )}
+
+            {/* CTA buttons — styled with gradients */}
+            <motion.div
+              className="flex flex-col sm:flex-row gap-3 w-full"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <Link
+                href="#projects"
+                className="flex-1 py-3 px-5 rounded-xl font-medium flex items-center justify-center gap-2 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md text-white"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #1E2430 0%, #2d3444 100%)",
+                  boxShadow: "0 2px 12px rgba(30,36,48,0.18)",
+                }}
+              >
+                <FileText className="w-4 h-4 shrink-0" />
+                查看代表项目
+              </Link>
+              <a
+                href={resumeHref}
+                download
+                className="flex-1 py-3 px-5 rounded-xl font-medium flex items-center justify-center gap-2 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-soft text-editorial-title"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(158,158,244,0.12) 0%, rgba(232,182,135,0.1) 100%)",
+                  border: "1px solid rgba(158,158,244,0.3)",
+                  boxShadow: "0 2px 8px rgba(158,158,244,0.08)",
+                }}
+              >
+                <Download className="w-4 h-4 shrink-0" />
+                {resumeLabel}
+              </a>
+            </motion.div>
+
+            {/* Sub-links */}
+            <motion.div
+              className="flex items-center gap-5 text-sm text-editorial-muted"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.65 }}
+            >
+              <Link
+                href="#about"
+                className="inline-flex items-center gap-1.5 hover:text-editorial-accent transition-colors"
+              >
+                <UserRound className="w-3.5 h-3.5" />
+                了解我
+              </Link>
+              <span className="text-editorial-muted/30" aria-hidden>·</span>
+              <Link
+                href="#contact"
+                className="inline-flex items-center gap-1.5 hover:text-editorial-accent transition-colors"
+              >
+                <Mail className="w-3.5 h-3.5" />
+                联系我
+              </Link>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Scroll hint */}
         <motion.div
-          className="absolute bottom-12 left-1/2 -translate-x-1/2"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10"
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2.2, repeat: Infinity }}
         >
-          <ArrowDown className="w-6 h-6 text-editorial-muted" />
+          <ArrowDown className="w-5 h-5 text-editorial-muted/50" />
         </motion.div>
       </section>
 
@@ -126,39 +198,63 @@ export function HomePageClient({ content }: HomePageClientProps) {
         <CareerTrajectory />
       </section>
 
+      {/* ── English Proficiency ── */}
       <section
-        id="stats"
+        id="english"
         className="py-16 md:py-20 scroll-mt-20 border-t border-editorial-title/[0.06]"
       >
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-2xl mx-auto">
             <p className="text-center text-[11px] font-medium text-editorial-muted uppercase tracking-[0.2em] mb-3">
-              Evidence
+              Language Proficiency
             </p>
             <h2 className="text-center text-2xl sm:text-3xl font-semibold text-editorial-title mb-10 tracking-tight">
-              用数字建立信任
+              英语能力
             </h2>
-            <div className="grid grid-cols-2 gap-2 sm:gap-4">
-              {content.stats.map((stat, i) => (
+            <div className="grid grid-cols-2 gap-4 sm:gap-6">
+              {[
+                {
+                  score: "107",
+                  exam: "TOEFL",
+                  sub: "R27 · L30 · S23 · W27",
+                  note: "达到顶尖项目申请门槛",
+                },
+                {
+                  score: "330",
+                  exam: "GRE",
+                  sub: "Verbal 160 + Quant 170",
+                  note: "全球前 10% 水平",
+                },
+              ].map((item, i) => (
                 <motion.div
-                  key={`${stat.label}-${i}`}
-                  initial={{ opacity: 0, y: 10 }}
+                  key={item.exam}
+                  initial={{ opacity: 0, y: 14 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.05 }}
-                  className="group border border-editorial-title/10 bg-editorial-card rounded-lg px-4 py-5 sm:px-5 sm:py-6 transition-colors hover:border-editorial-accent/35 hover:bg-white hover:shadow-soft"
+                  transition={{ delay: i * 0.1 }}
+                  className="group relative overflow-hidden border border-editorial-title/10 bg-editorial-card rounded-2xl px-6 py-7 sm:px-8 sm:py-8 hover:border-editorial-accent/30 hover:bg-white hover:shadow-soft transition-all duration-300"
                 >
-                  <div className="text-2xl sm:text-3xl font-semibold text-editorial-title tabular-nums tracking-tight leading-none mb-2">
-                    {stat.number}
+                  {/* Subtle gradient orb */}
+                  <div
+                    className="absolute -top-6 -right-6 w-24 h-24 rounded-full opacity-10 group-hover:opacity-20 transition-opacity duration-500"
+                    style={{
+                      background:
+                        "radial-gradient(circle, rgba(158,158,244,0.8) 0%, transparent 70%)",
+                    }}
+                  />
+                  <div className="relative">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-editorial-accent mb-1">
+                      {item.exam}
+                    </p>
+                    <p
+                      className="font-semibold text-editorial-title tabular-nums leading-none mb-3"
+                      style={{ fontSize: "clamp(2.8rem, 7vw, 3.8rem)" }}
+                    >
+                      {item.score}
+                    </p>
+                    <p className="text-xs font-mono text-editorial-muted mb-2">{item.sub}</p>
+                    <p className="text-[11px] text-editorial-body leading-snug">{item.note}</p>
                   </div>
-                  <div className="text-[11px] sm:text-xs font-medium text-editorial-muted uppercase tracking-wider mb-1.5">
-                    {stat.label}
-                  </div>
-                  {stat.context && (
-                    <div className="text-[11px] sm:text-xs text-editorial-body leading-snug line-clamp-3">
-                      {stat.context}
-                    </div>
-                  )}
                 </motion.div>
               ))}
             </div>
@@ -239,6 +335,56 @@ export function HomePageClient({ content }: HomePageClientProps) {
               <Download className="w-4 h-4" />
               {resumeLabel}
             </a>
+
+            {/* Social links */}
+            <div className="flex items-center justify-center gap-3 pt-1">
+              {/* GitHub */}
+              <a
+                href="https://github.com/YOUR_GITHUB_USERNAME"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+                className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-editorial-title/12 bg-editorial-card text-editorial-body hover:border-editorial-title/30 hover:bg-white hover:text-editorial-title transition-all duration-200 text-sm font-medium"
+              >
+                <Github className="w-4 h-4" />
+                GitHub
+              </a>
+
+              {/* 小红书 */}
+              <a
+                href="https://www.xiaohongshu.com/user/profile/YOUR_XIAOHONGSHU_ID"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="小红书"
+                className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-editorial-title/12 bg-editorial-card text-editorial-body hover:border-[#FF2442]/30 hover:bg-white hover:text-[#FF2442] transition-all duration-200 text-sm font-medium"
+              >
+                {/* 小红书 icon */}
+                <svg
+                  viewBox="0 0 24 24"
+                  className="w-4 h-4 fill-current"
+                  aria-hidden="true"
+                >
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.5 14.5v-9l7 4.5-7 4.5z" />
+                </svg>
+                小红书
+              </a>
+
+              {/* WeChat */}
+              <button
+                type="button"
+                aria-label="微信"
+                title="微信 ID: YOUR_WECHAT_ID"
+                className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-editorial-title/12 bg-editorial-card text-editorial-body hover:border-[#07C160]/30 hover:bg-white hover:text-[#07C160] transition-all duration-200 text-sm font-medium"
+                onClick={() => {
+                  navigator.clipboard?.writeText("YOUR_WECHAT_ID").catch(() => {});
+                  alert("微信 ID 已复制：YOUR_WECHAT_ID");
+                }}
+              >
+                <MessageCircle className="w-4 h-4" />
+                微信
+              </button>
+            </div>
+
             <p className="text-xs text-editorial-muted leading-relaxed">
               手机与更多联系方式见简历 PDF，避免首页信息过度裸露。
             </p>

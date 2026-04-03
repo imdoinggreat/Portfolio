@@ -24,7 +24,7 @@ export default function RootLayout({
 
         <SiteHeader />
 
-        <div className="pt-16">{children}</div>
+        <div className="pt-[72px]">{children}</div>
       </body>
     </html>
   );
