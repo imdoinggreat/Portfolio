@@ -25,24 +25,24 @@ export default function CaseStudyPage({ params }: PageProps) {
   ];
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-honeydew-50/40">
+    <main className="min-h-screen bg-editorial-canvas">
       <article className="container mx-auto px-4 py-16 max-w-3xl">
         <Link
           href="/#projects"
-          className="text-sm text-foreground/60 hover:text-honeydew-600 transition-colors"
+          className="text-sm text-editorial-muted hover:text-editorial-accent transition-colors"
         >
-          ← 返回首页 · 攀登路线
+          ← 返回首页 · 职业路径
         </Link>
 
         <header className="mt-10 mb-12">
-          <p className="text-sm text-foreground/50 mb-2">
+          <p className="text-sm text-editorial-muted mb-2">
             {study.period} · {study.role}
           </p>
-          <h1 className="text-4xl font-bold text-foreground mb-2">
+          <h1 className="text-4xl font-semibold text-editorial-title mb-2 tracking-tight">
             {study.title}
           </h1>
-          <p className="text-xl text-foreground/70">{study.subtitle}</p>
-          <p className="mt-6 text-lg text-foreground/80 leading-relaxed border-l-4 border-honeydew-300 pl-4">
+          <p className="text-xl text-editorial-body">{study.subtitle}</p>
+          <p className="mt-6 text-lg text-editorial-body leading-relaxed border-l-[3px] border-editorial-accent/50 pl-4">
             {study.oneLiner}
           </p>
         </header>
@@ -50,26 +50,26 @@ export default function CaseStudyPage({ params }: PageProps) {
         <div className="space-y-12">
           {blocks.map((b) => (
             <section key={b.heading}>
-              <h2 className="text-xl font-bold mb-4 text-honeydew-600">
+              <h2 className="text-xs font-semibold uppercase tracking-[0.15em] mb-4 text-editorial-muted">
                 {b.heading}
               </h2>
-              <div className="text-foreground/80 leading-relaxed whitespace-pre-line">
+              <div className="text-editorial-body leading-relaxed whitespace-pre-line">
                 {b.body}
               </div>
             </section>
           ))}
         </div>
 
-        <footer className="mt-16 pt-8 border-t border-honeydew-200/50 flex flex-wrap gap-4">
+        <footer className="mt-16 pt-8 border-t border-editorial-title/10 flex flex-wrap gap-4">
           <Link
             href="/cases"
-            className="text-sm font-medium text-honeydew-600 hover:underline"
+            className="text-sm font-medium text-editorial-accent hover:underline"
           >
             查看作品集图库
           </Link>
           <Link
             href="/#contact"
-            className="text-sm font-medium text-foreground/60 hover:text-honeydew-600"
+            className="text-sm font-medium text-editorial-muted hover:text-editorial-accent"
           >
             联系我
           </Link>

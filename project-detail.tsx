@@ -173,7 +173,7 @@ const projectData: ProjectDetail = {
 
 export function ProjectDetailPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-honeydew-50/30 to-lychee-50/20">
+    <div className="min-h-screen bg-gradient-to-b from-editorial-canvas via-editorial-canvas to-editorial-card/80">
       {/* 返回按钮 */}
       <div className="container mx-auto px-4 pt-24 pb-8">
         <Link
@@ -230,13 +230,13 @@ export function ProjectDetailPage() {
               {projectData.situation.highlights.map((item, i) => (
                 <motion.div
                   key={i}
-                  className="flex items-start gap-3 p-4 bg-honeydew-50 rounded-lg"
+                  className="flex items-start gap-3 p-4 bg-editorial-card border border-editorial-title/8 rounded-lg"
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
                 >
-                  <div className="w-2 h-2 rounded-full bg-honeydew-400 mt-2 flex-shrink-0" />
+                  <div className="w-2 h-2 rounded-full bg-editorial-accent mt-2 flex-shrink-0" />
                   <span className="text-foreground/80">{item}</span>
                 </motion.div>
               ))}
@@ -292,7 +292,7 @@ export function ProjectDetailPage() {
                     <div className="space-y-2">
                       {step.methods.map((method, j) => (
                         <div key={j} className="flex items-center gap-2 text-sm text-foreground/70">
-                          <div className="w-1.5 h-1.5 rounded-full bg-lychee-400" />
+                          <div className="w-1.5 h-1.5 rounded-full bg-editorial-accent/80" />
                           {method}
                         </div>
                       ))}
@@ -316,7 +316,7 @@ export function ProjectDetailPage() {
                   transition={{ delay: i * 0.05 }}
                 >
                   <div className="text-4xl mb-2">{metric.icon}</div>
-                  <div className="text-3xl font-bold text-honeydew-500 mb-1">
+                  <div className="text-3xl font-semibold text-editorial-title mb-1 tabular-nums">
                     {metric.value}
                   </div>
                   <div className="text-sm text-foreground/60">{metric.label}</div>
@@ -326,7 +326,7 @@ export function ProjectDetailPage() {
 
             <div className="space-y-4 mb-8">
               {projectData.result.feedback.map((item, i) => (
-                <div key={i} className="p-4 bg-lychee-50 rounded-lg border-l-4 border-lychee-400">
+                <div key={i} className="p-4 bg-editorial-card rounded-lg border-l-[3px] border-editorial-accent/45">
                   <p className="text-foreground/80 italic">"{item}"</p>
                 </div>
               ))}
@@ -350,7 +350,7 @@ export function ProjectDetailPage() {
                 <h4 className="font-semibold mb-3 text-lg">💡 我学到了什么</h4>
                 <div className="space-y-3">
                   {projectData.insights.learnings.map((item, i) => (
-                    <div key={i} className="p-4 bg-mango-50 rounded-lg">
+                    <div key={i} className="p-4 bg-editorial-card border border-editorial-title/8 rounded-lg">
                       <p className="text-foreground/80">{item}</p>
                     </div>
                   ))}
@@ -361,7 +361,7 @@ export function ProjectDetailPage() {
                 <h4 className="font-semibold mb-3 text-lg">🔄 如果重来我会...</h4>
                 <div className="space-y-3">
                   {projectData.insights.improvements.map((item, i) => (
-                    <div key={i} className="p-4 bg-honeydew-50 rounded-lg">
+                    <div key={i} className="p-4 bg-editorial-card border border-editorial-title/8 rounded-lg">
                       <p className="text-foreground/80">{item}</p>
                     </div>
                   ))}
@@ -378,7 +378,7 @@ export function ProjectDetailPage() {
                 {projectData.skills.map((skill) => (
                   <span
                     key={skill}
-                    className="px-4 py-2 bg-honeydew-100 text-honeydew-500 rounded-full text-sm font-medium"
+                    className="px-4 py-2 border border-editorial-title/10 text-editorial-muted rounded-full text-sm font-medium"
                   >
                     {skill}
                   </span>
@@ -394,7 +394,7 @@ export function ProjectDetailPage() {
                     <a
                       key={link.label}
                       href={link.url}
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-lychee-100 text-lychee-500 rounded-lg hover:bg-lychee-200 transition-colors"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-editorial-title text-white rounded-lg hover:opacity-90 transition-opacity"
                     >
                       <Download className="w-4 h-4" />
                       {link.label}
@@ -428,8 +428,8 @@ function Section({
       viewport={{ once: true }}
     >
       <div className="flex items-baseline gap-4 mb-6">
-        <span className="text-6xl font-bold text-honeydew-200">{number}</span>
-        <h3 className="text-3xl font-bold">{title}</h3>
+        <span className="text-6xl font-bold text-editorial-accent/20 tabular-nums">{number}</span>
+        <h3 className="text-3xl font-semibold text-editorial-title">{title}</h3>
       </div>
       {children}
     </motion.section>
