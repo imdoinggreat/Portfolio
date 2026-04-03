@@ -48,6 +48,13 @@ export const siteSettingsType = defineType({
       ],
     }),
     defineField({
+      name: "heroShowcaseImage",
+      title: "首页展示图（滚动动画内，建议宽图 1400×720）",
+      type: "image",
+      options: { hotspot: true },
+      description: "首页滚动动画中显示的大图，替换后首页自动更新",
+    }),
+    defineField({
       name: "aboutTitle",
       title: "关于我 — 标题",
       type: "string",

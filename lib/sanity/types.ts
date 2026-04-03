@@ -7,6 +7,7 @@ export type HomeContent = {
   /** Short readable keywords shown as chips under the hero */
   heroKeywordChips: string[];
   heroSlides: HeroSlide[];
+  heroShowcaseImage: string;
   aboutTitle: string;
   aboutBody: string;
   highlights: { icon: string; title: string; description: string }[];

@@ -1,6 +1,7 @@
 "use client";
 
 import { CareerTrajectory } from "@/components/career-trajectory";
+import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 import { FallingPattern } from "@/components/ui/falling-pattern";
 import { GlowCard } from "@/components/ui/spotlight-card";
 import { VinylRecord } from "@/components/ui/vinyl-record";
@@ -8,6 +9,7 @@ import type { HomeContent } from "@/lib/sanity/types";
 import { motion } from "framer-motion";
 import {
   ArrowDown,
+  ArrowRight,
   Download,
   FileText,
   Github,
@@ -15,6 +17,7 @@ import {
   MessageCircle,
   UserRound,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 type HomePageClientProps = {
@@ -124,7 +127,7 @@ export function HomePageClient({ content }: HomePageClientProps) {
               transition={{ delay: 0.5 }}
             >
               <Link
-                href="#projects"
+                href="/cases"
                 className="flex-1 py-3 px-5 rounded-xl font-medium flex items-center justify-center gap-2 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md text-white"
                 style={{
                   background:
@@ -187,6 +190,44 @@ export function HomePageClient({ content }: HomePageClientProps) {
         </motion.div>
       </section>
 
+      {/* ── Showcase Scroll Section ── */}
+      <section className="overflow-hidden border-t border-editorial-title/[0.06]">
+        <ContainerScroll
+          titleComponent={
+            <div className="flex flex-col items-center gap-3">
+              <p className="text-[11px] tracking-[0.25em] uppercase text-editorial-muted font-medium">
+                Featured Work · 代表项目
+              </p>
+              <h2
+                className="font-semibold text-editorial-title tracking-tight leading-tight"
+                style={{ fontSize: "clamp(2rem, 5vw, 3.2rem)" }}
+              >
+                用数据讲好每一个故事
+              </h2>
+              <p className="text-editorial-body text-base max-w-md">
+                从洞察到落地，从策略到转化
+              </p>
+              <Link
+                href="/cases"
+                className="mt-1 inline-flex items-center gap-1.5 text-sm font-medium text-editorial-accent hover:underline"
+              >
+                浏览完整作品集
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          }
+        >
+          <Image
+            src={content.heroShowcaseImage}
+            alt="作品集展示"
+            width={1400}
+            height={720}
+            className="mx-auto rounded-2xl object-cover h-full object-top"
+            draggable={false}
+          />
+        </ContainerScroll>
+      </section>
+
       <section
         id="projects"
         className="min-h-screen py-12 md:py-20 scroll-mt-20 border-t border-editorial-title/[0.06]"
@@ -196,6 +237,55 @@ export function HomePageClient({ content }: HomePageClientProps) {
           职业路径与代表项目
         </h2>
         <CareerTrajectory />
+      </section>
+
+      <section
+        id="about"
+        className="min-h-screen flex items-center py-16 md:py-20 scroll-mt-20 border-t border-editorial-title/[0.06]"
+      >
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-14 md:mb-16"
+            >
+              <h2 className="text-3xl sm:text-4xl font-semibold text-editorial-title mb-6 tracking-tight">
+                {content.aboutTitle}
+              </h2>
+              <p className="text-base sm:text-lg text-editorial-body leading-relaxed max-w-2xl mx-auto whitespace-pre-line">
+                {content.aboutBody}
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              {content.highlights.map((item, i) => (
+                <motion.div
+                  key={`${item.title}-${i}`}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08 }}
+                >
+                  <GlowCard
+                    glowColor="accent"
+                    customSize
+                    className="w-full min-h-[240px] text-center border border-editorial-title/10 bg-editorial-card shadow-none hover:shadow-soft"
+                  >
+                    <div className="text-3xl mb-3">{item.icon}</div>
+                    <h3 className="text-lg font-semibold mb-2 text-editorial-title">
+                      {item.title}
+                    </h3>
+                    <p className="text-editorial-body text-sm leading-relaxed">
+                      {item.description}
+                    </p>
+                  </GlowCard>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* ── English Proficiency ── */}
@@ -255,55 +345,6 @@ export function HomePageClient({ content }: HomePageClientProps) {
                     <p className="text-xs font-mono text-editorial-muted mb-2">{item.sub}</p>
                     <p className="text-[11px] text-editorial-body leading-snug">{item.note}</p>
                   </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section
-        id="about"
-        className="min-h-screen flex items-center py-16 md:py-20 scroll-mt-20 border-t border-editorial-title/[0.06]"
-      >
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center mb-14 md:mb-16"
-            >
-              <h2 className="text-3xl sm:text-4xl font-semibold text-editorial-title mb-6 tracking-tight">
-                {content.aboutTitle}
-              </h2>
-              <p className="text-base sm:text-lg text-editorial-body leading-relaxed max-w-2xl mx-auto whitespace-pre-line">
-                {content.aboutBody}
-              </p>
-            </motion.div>
-
-            <div className="grid md:grid-cols-3 gap-6">
-              {content.highlights.map((item, i) => (
-                <motion.div
-                  key={`${item.title}-${i}`}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.08 }}
-                >
-                  <GlowCard
-                    glowColor="accent"
-                    customSize
-                    className="w-full min-h-[240px] text-center border border-editorial-title/10 bg-editorial-card shadow-none hover:shadow-soft"
-                  >
-                    <div className="text-3xl mb-3">{item.icon}</div>
-                    <h3 className="text-lg font-semibold mb-2 text-editorial-title">
-                      {item.title}
-                    </h3>
-                    <p className="text-editorial-body text-sm leading-relaxed">
-                      {item.description}
-                    </p>
-                  </GlowCard>
                 </motion.div>
               ))}
             </div>

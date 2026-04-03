@@ -9,6 +9,8 @@ export const defaultHomeContent: HomeContent = {
     "Data Analysis",
     "Product Thinking",
   ],
+  heroShowcaseImage:
+    "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1400&q=80",
   heroSlides: [
     {
       text: "USER INSIGHT",

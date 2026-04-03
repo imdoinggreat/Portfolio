@@ -20,6 +20,7 @@ const siteSettingsQuery = groq`
     heroTagline,
     heroKeywordChips,
     heroSlides[]{ text, image },
+    heroShowcaseImage,
     aboutTitle,
     aboutBody,
     highlights[]{ icon, title, description },
@@ -64,6 +65,7 @@ type RawSite = Partial<{
   heroTagline: string;
   heroKeywordChips: string[];
   heroSlides: RawHeroSlide[];
+  heroShowcaseImage?: Image;
   aboutTitle: string;
   aboutBody: string;
   highlights: HomeContent["highlights"];
@@ -117,6 +119,8 @@ function mergeHome(raw: RawSite): HomeContent {
         ? raw.heroKeywordChips.filter(Boolean)
         : base.heroKeywordChips,
     heroSlides: mapHeroSlides(raw.heroSlides),
+    heroShowcaseImage:
+      urlForImage(raw.heroShowcaseImage) || base.heroShowcaseImage,
     aboutTitle: raw.aboutTitle || base.aboutTitle,
     aboutBody: raw.aboutBody?.trim() ? raw.aboutBody : base.aboutBody,
     highlights:
