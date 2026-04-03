@@ -83,7 +83,10 @@ export function WavePath({ className, ...props }: WavePathProps) {
   return (
     <div
       ref={containerRef}
-      className={cn("relative h-px w-[70vw] max-w-4xl text-foreground", className)}
+      className={cn(
+        "relative h-px w-[min(92vw,56rem)] max-w-[56rem] text-foreground/70",
+        className,
+      )}
       {...props}
     >
       <div
@@ -96,7 +99,8 @@ export function WavePath({ className, ...props }: WavePathProps) {
         <path
           ref={path}
           className="fill-none stroke-current"
-          strokeWidth={2}
+          strokeWidth={2.25}
+          strokeLinecap="round"
         />
       </svg>
     </div>

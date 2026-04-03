@@ -2,6 +2,10 @@
 
 import { ClimbingRoute } from "@/components/climbing-route";
 import { CircularRevealHeading } from "@/components/ui/circular-reveal-heading";
+import {
+  GlowCard,
+  type GlowColor,
+} from "@/components/ui/spotlight-card";
 import type { HomeContent } from "@/lib/sanity/types";
 import { motion } from "framer-motion";
 import {
@@ -27,16 +31,19 @@ export function HomePageClient({ content }: HomePageClientProps) {
         <CircularRevealHeading
           items={content.heroSlides}
           centerText={
-            <div className="text-center max-w-md mx-auto px-2">
-              <h1 className="text-3xl font-bold text-foreground mb-2">
+            <div className="text-center text-[#f5e6d8]">
+              <div className="text-[9px] sm:text-[10px] tracking-[0.3em] uppercase opacity-80">
+                Portfolio
+              </div>
+              <h1 className="text-lg sm:text-xl md:text-2xl font-black tracking-tight mt-1 leading-tight">
                 {content.heroName}
               </h1>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-[11px] sm:text-xs mt-2 opacity-90 leading-snug font-medium">
                 {content.heroTagline}
               </p>
             </div>
           }
-          size="lg"
+          size="md"
         />
 
         {content.heroKeywordChips.length > 0 && (
@@ -183,22 +190,36 @@ export function HomePageClient({ content }: HomePageClientProps) {
             </motion.div>
 
             <div className="grid md:grid-cols-3 gap-8">
-              {content.highlights.map((item, i) => (
-                <motion.div
-                  key={`${item.title}-${i}`}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="glass-morphism rounded-2xl p-8 text-center hover:shadow-soft-lg transition-shadow"
-                >
-                  <div className="text-4xl mb-4">{item.icon}</div>
-                  <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                  <p className="text-foreground/70 text-sm leading-relaxed">
-                    {item.description}
-                  </p>
-                </motion.div>
-              ))}
+              {content.highlights.map((item, i) => {
+                const spotlightPalette: GlowColor[] = [
+                  "honeydew",
+                  "sage",
+                  "stone",
+                ];
+                return (
+                  <motion.div
+                    key={`${item.title}-${i}`}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                  >
+                    <GlowCard
+                      glowColor={spotlightPalette[i % spotlightPalette.length]}
+                      customSize
+                      className="w-full min-h-[260px] text-center border-white/40 shadow-soft"
+                    >
+                      <div className="text-4xl mb-4">{item.icon}</div>
+                      <h3 className="text-xl font-bold mb-2 text-foreground">
+                        {item.title}
+                      </h3>
+                      <p className="text-foreground/70 text-sm leading-relaxed">
+                        {item.description}
+                      </p>
+                    </GlowCard>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         </div>

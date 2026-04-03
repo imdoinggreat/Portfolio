@@ -12,7 +12,13 @@ type PhotographyPageClientProps = {
 export function PhotographyPageClient({ slides }: PhotographyPageClientProps) {
   return (
     <div className="min-h-screen">
-      <section className="relative h-[min(52vh,520px)] min-h-[360px] w-full overflow-hidden bg-gradient-to-b from-white via-honeydew-50/30 to-lychee-50/20">
+      <section
+        className="relative h-[min(62vh,640px)] min-h-[420px] w-full overflow-hidden"
+        style={{
+          background:
+            "linear-gradient(180deg, #ffffff 0%, #F0FAF5 14%, rgba(255, 245, 249, 0.5) 38%, rgba(255, 255, 255, 0.88) 62%, #FFF5F9 82%, #ffffff 100%)",
+        }}
+      >
         <div
           className="pointer-events-none absolute inset-0 z-10 opacity-[0.03]"
           style={{
@@ -35,7 +41,13 @@ export function PhotographyPageClient({ slides }: PhotographyPageClientProps) {
         </p>
       </section>
 
-      <div className="flex flex-col items-center gap-3 py-10 px-4">
+      {/* Soft bridge between hero and interactive divider — avoids a hard horizontal cut */}
+      <div
+        className="pointer-events-none h-14 sm:h-20 w-full bg-gradient-to-b from-[#FFF5F9]/90 via-white to-honeydew-50/25"
+        aria-hidden
+      />
+
+      <div className="flex flex-col items-center gap-4 px-4 pt-2 pb-14 sm:pb-16 bg-gradient-to-b from-honeydew-50/20 via-white/80 to-transparent">
         <WavePath />
         <p className="text-sm text-muted-foreground text-center max-w-md">
           在分割线上移动鼠标，感受波浪形反馈

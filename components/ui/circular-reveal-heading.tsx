@@ -1,16 +1,17 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React from "react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-interface TextItem {
+/** `image` is optional and unused — kept for CMS / HeroSlide compatibility. */
+export interface CircularRevealTextItem {
   text: string;
-  image: string;
+  image?: string;
 }
 
 interface CircularRevealHeadingProps {
-  items: TextItem[];
+  items: CircularRevealTextItem[];
   centerText: React.ReactNode;
   className?: string;
   size?: "sm" | "md" | "lg";
@@ -18,84 +19,30 @@ interface CircularRevealHeadingProps {
 
 const sizeConfig = {
   sm: {
-    container: "h-[300px] w-[300px]",
-    fontSize: "text-xs",
-    tracking: "tracking-[0.25em]",
-    radius: 120,
-    gap: 40,
-    imageSize: "w-[70%] h-[70%]",
-    textStyle: "font-medium",
+    container: "h-[320px] w-[320px]",
+    fontSize: "text-[10px]",
+    tracking: "tracking-[0.35em]",
+    radius: 140,
+    gap: 42,
+    labelSize: "w-[120px] h-[120px]",
   },
   md: {
-    container: "h-[400px] w-[400px]",
-    fontSize: "text-sm",
-    tracking: "tracking-[0.3em]",
-    radius: 160,
-    gap: 30,
-    imageSize: "w-[75%] h-[75%]",
-    textStyle: "font-medium",
+    container: "h-[430px] w-[430px]",
+    fontSize: "text-xs",
+    tracking: "tracking-[0.4em]",
+    radius: 172,
+    gap: 34,
+    labelSize: "w-[150px] h-[150px]",
   },
   lg: {
-    container: "h-[500px] w-[500px]",
-    fontSize: "text-base",
-    tracking: "tracking-[0.35em]",
-    radius: 200,
-    gap: 20,
-    imageSize: "w-[80%] h-[80%]",
-    textStyle: "font-semibold",
+    container: "h-[540px] w-[540px]",
+    fontSize: "text-sm",
+    tracking: "tracking-[0.45em]",
+    radius: 215,
+    gap: 28,
+    labelSize: "w-[180px] h-[180px]",
   },
 };
-
-const usePreloadImages = (images: string[]) => {
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    const loadImage = (url: string): Promise<void> =>
-      new Promise((resolve, reject) => {
-        const img = new Image();
-        img.src = url;
-        img.onload = () => resolve();
-        img.onerror = reject;
-      });
-
-    Promise.all(images.map(loadImage))
-      .then(() => setLoaded(true))
-      .catch((err) => console.error("Error preloading images:", err));
-  }, [images]);
-
-  return loaded;
-};
-
-const ImagePreloader = ({ images }: { images: string[] }) => (
-  <div className="hidden" aria-hidden="true">
-    {images.map((src, index) => (
-      <img key={index} src={src} alt="" />
-    ))}
-  </div>
-);
-
-const ImageOverlay = ({
-  image,
-  size = "md",
-}: {
-  image: string;
-  size?: "sm" | "md" | "lg";
-}) => (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-    transition={{ duration: 0.3 }}
-    className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
-  >
-    <motion.img
-      src={image}
-      alt=""
-      className={cn(sizeConfig[size].imageSize, "object-cover rounded-full")}
-      style={{ filter: "brightness(0.9)" }}
-    />
-  </motion.div>
-);
 
 export const CircularRevealHeading = ({
   items,
@@ -103,9 +50,7 @@ export const CircularRevealHeading = ({
   className,
   size = "md",
 }: CircularRevealHeadingProps) => {
-  const [activeImage, setActiveImage] = useState<string | null>(null);
   const config = sizeConfig[size];
-  const imagesLoaded = usePreloadImages(items.map((item) => item.image));
 
   const createTextSegments = () => {
     const totalItems = items.length;
@@ -116,27 +61,21 @@ export const CircularRevealHeading = ({
     return items.map((item, index) => {
       const startPosition = index * (segmentDegrees + config.gap);
       const startOffset = `${(startPosition / 360) * 100}%`;
+
       return (
         <g key={index}>
           <text
             className={cn(
               config.fontSize,
               config.tracking,
-              config.textStyle,
-              "uppercase cursor-pointer transition-all duration-300",
+              "uppercase transition-colors duration-300 font-semibold",
             )}
-            onMouseEnter={() => imagesLoaded && setActiveImage(item.image)}
-            onMouseLeave={() => setActiveImage(null)}
-            style={{
-              filter: "url(#textShadow)",
-              transition: "all 0.3s ease",
-            }}
           >
             <textPath
               href="#curve"
-              className="fill-[#666666] hover:fill-[#2d3436]"
+              className="fill-white/80"
               startOffset={startOffset}
-              textLength={`${segmentDegrees * 1.8}`}
+              textLength={`${segmentDegrees * 1.85}`}
               lengthAdjust="spacingAndGlyphs"
             >
               {item.text}
@@ -148,106 +87,102 @@ export const CircularRevealHeading = ({
   };
 
   return (
-    <>
-      <ImagePreloader images={items.map((item) => item.image)} />
+    <motion.div
+      whileHover={{ scale: 1.015 }}
+      whileTap={{ scale: 0.985 }}
+      className={cn(
+        "relative overflow-hidden rounded-full",
+        config.container,
+        "bg-[#0c0c0d] border border-white/10 shadow-[0_30px_90px_rgba(0,0,0,0.45)]",
+        className,
+      )}
+    >
+      {/* Vinyl grooves — tuned to reduce harsh moiré at the rim */}
+      <div
+        className="absolute inset-0 rounded-full opacity-[0.72]"
+        style={{
+          background: `
+              radial-gradient(circle at center, rgba(255,255,255,0.025) 0 1.5px, transparent 1.5px 10px),
+              repeating-radial-gradient(
+                circle at center,
+                rgba(255,255,255,0.055) 0px,
+                rgba(255,255,255,0.055) 1px,
+                rgba(0,0,0,0) 2px,
+                rgba(0,0,0,0) 9px
+              ),
+              radial-gradient(circle at center, #1a1a1c 0%, #0b0b0c 58%, #050505 100%)
+            `,
+        }}
+      />
+
+      <div
+        className="absolute inset-0 rounded-full pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(135deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.04) 18%, rgba(255,255,255,0) 36%)",
+          mixBlendMode: "screen",
+        }}
+      />
+
+      <div className="absolute inset-[10px] rounded-full border border-white/6" />
+      <div className="absolute inset-[22px] rounded-full border border-white/5" />
+
+      {/* Center label — text always visible (no hover image swap) */}
       <motion.div
-        whileHover={{
-          boxShadow:
-            "20px 20px 40px rgba(213, 242, 232, 0.3), -20px -20px 40px rgba(255, 255, 255, 0.8)",
-        }}
-        whileTap={{ scale: 0.98 }}
-        animate={{ y: [0, -8, 0] }}
+        className="absolute inset-0 flex items-center justify-center z-10"
+        animate={{ rotate: 360 }}
         transition={{
-          duration: 5,
+          duration: 30,
           repeat: Infinity,
-          ease: "easeInOut",
+          ease: "linear",
         }}
-        className={cn(
-          "relative overflow-hidden",
-          config.container,
-          "rounded-full bg-gradient-to-br from-honeydew-100 to-white",
-          "shadow-[16px_16px_32px_rgba(213,242,232,0.2),-16px_-16px_32px_rgba(255,255,255,0.8)]",
-          "transition-all duration-500 ease-out",
-          className,
-        )}
       >
-        <AnimatePresence>
-          {activeImage && imagesLoaded && (
-            <ImageOverlay image={activeImage} size={size} />
+        <div
+          className={cn(
+            "rounded-full flex items-center justify-center relative shadow-2xl border border-black/20",
+            config.labelSize,
           )}
-        </AnimatePresence>
-
-        <motion.div
-          className="absolute inset-[2px] rounded-full bg-gradient-to-br from-honeydew-50 to-white"
           style={{
-            boxShadow:
-              "inset 6px 6px 12px rgba(213, 242, 232, 0.3), inset -6px -6px 12px rgba(255, 255, 255, 0.8)",
-          }}
-        />
-
-        <motion.div
-          className="absolute inset-[12px] rounded-full bg-gradient-to-br from-white to-honeydew-50"
-          style={{
-            boxShadow:
-              "inset 4px 4px 8px rgba(213, 242, 232, 0.2), inset -4px -4px 8px rgba(255, 255, 255, 0.6)",
-          }}
-        />
-
-        <motion.div className="absolute inset-0 flex items-center justify-center">
-          <AnimatePresence>
-            {!activeImage && (
-              <motion.div
-                initial={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-                className="relative z-10 p-6 rounded-3xl"
-                whileHover={{
-                  boxShadow:
-                    "inset 3px 3px 6px rgba(213, 242, 232, 0.2), inset -3px -3px 6px rgba(255, 255, 255, 0.6)",
-                }}
-              >
-                {centerText}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-
-        <motion.div
-          className="absolute inset-0"
-          initial={{ rotate: 0 }}
-          animate={{ rotate: 360 }}
-          transition={{
-            duration: 30,
-            repeat: Infinity,
-            ease: "linear",
+            background:
+              "radial-gradient(circle at 35% 30%, #f4b183 0%, #c96d3d 45%, #7a2f1b 100%)",
           }}
         >
-          <svg viewBox="0 0 400 400" className="w-full h-full">
-            <defs>
-              <filter id="textShadow">
-                <feDropShadow
-                  dx="0"
-                  dy="1"
-                  stdDeviation="1"
-                  floodOpacity="0.2"
-                />
-              </filter>
-            </defs>
-            <path
-              id="curve"
-              fill="none"
-              d={`M 200,200 m -${config.radius},0 a ${config.radius},${config.radius} 0 1,1 ${
-                config.radius * 2
-              },0 a ${config.radius},${config.radius} 0 1,1 -${
-                config.radius * 2
-              },0`}
-            />
-            {createTextSegments()}
-          </svg>
-        </motion.div>
+          <div className="absolute inset-[10px] rounded-full border border-white/15" />
+          <div className="absolute inset-[24px] rounded-full border border-white/10" />
+          <div className="absolute w-4 h-4 rounded-full bg-[#f3e8dc] shadow-inner" />
+          <div className="relative z-10 text-center px-3 max-w-[min(100%,12rem)]">
+            {centerText}
+          </div>
+        </div>
       </motion.div>
-    </>
+
+      <motion.div
+        className="absolute inset-0 z-30"
+        initial={{ rotate: 0 }}
+        animate={{ rotate: 360 }}
+        transition={{
+          duration: 38,
+          repeat: Infinity,
+          ease: "linear",
+        }}
+      >
+        <svg
+          viewBox="0 0 400 400"
+          className="w-full h-full"
+          style={{ shapeRendering: "geometricPrecision" }}
+        >
+          <path
+            id="curve"
+            fill="none"
+            d={`M 200,200 m -${config.radius},0 a ${config.radius},${config.radius} 0 1,1 ${
+              config.radius * 2
+            },0 a ${config.radius},${config.radius} 0 1,1 -${
+              config.radius * 2
+            },0`}
+          />
+          {createTextSegments()}
+        </svg>
+      </motion.div>
+    </motion.div>
   );
 };
-
