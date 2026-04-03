@@ -19,8 +19,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh-CN" className="scroll-smooth">
-      <body className={`${inter.className} bg-editorial-canvas text-editorial-body antialiased`}>
-        <div className="fixed inset-0 -z-10 bg-editorial-canvas" aria-hidden />
+      <body className={`${inter.className} text-editorial-body antialiased`}>
+        <div
+          className="fixed inset-0 -z-10"
+          style={{
+            background:
+              "radial-gradient(125% 125% at 50% 10%, #fff 40%, #6366f1 100%)",
+          }}
+          aria-hidden
+        />
 
         <SiteHeader />
 
