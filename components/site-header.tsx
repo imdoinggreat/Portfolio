@@ -29,11 +29,11 @@ export function SiteHeader() {
   const activeIndex = activeIndexFromPath(pathname);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 glass-morphism border-b border-honeydew-200/30">
+    <header className="fixed top-0 left-0 right-0 z-40 glass-morphism border-b border-editorial-title/8">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
         <Link
           href="/"
-          className="text-xl font-bold hover:text-honeydew-500 transition-colors shrink-0"
+          className="text-xl font-semibold text-editorial-title hover:text-editorial-accent transition-colors shrink-0 tracking-tight"
         >
           张紫茹
         </Link>
@@ -41,8 +41,8 @@ export function SiteHeader() {
           <LimelightNav
             items={navItems}
             activeIndex={activeIndex}
-            className="bg-white/80 dark:bg-card/80 max-w-[min(100vw-8rem,28rem)] overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-            limelightClassName="bg-honeydew-400"
+            className="bg-editorial-card/90 max-w-[min(100vw-8rem,28rem)] overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border border-editorial-title/6"
+            limelightClassName="bg-editorial-accent"
           />
         </div>
       </div>

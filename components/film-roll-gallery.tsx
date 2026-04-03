@@ -9,6 +9,7 @@ import {
 } from "framer-motion";
 import { ChevronLeft, ChevronRight, Camera, X } from "lucide-react";
 import Image from "next/image";
+import { GlowCard } from "@/components/ui/spotlight-card";
 
 export interface FilmFrame {
   id: string;
@@ -140,28 +141,37 @@ export function FilmRollGallery({ initialFrames }: FilmRollGalleryProps) {
   }, [currentIndex, frames.length]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-honeydew-50/30 to-lychee-50/20 py-20">
+    <div className="min-h-screen bg-editorial-canvas py-16 md:py-20">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 md:mb-16">
           <motion.div
             className="flex items-center justify-center gap-3 mb-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Camera className="w-8 h-8 text-honeydew-400" />
-            <h2 className="text-5xl font-bold">作品胶卷</h2>
+            <Camera className="w-7 h-7 sm:w-8 sm:h-8 text-editorial-accent" />
+            <h2 className="text-3xl sm:text-4xl font-semibold text-editorial-title tracking-tight">
+              作品胶卷
+            </h2>
           </motion.div>
-          <p className="text-foreground/60 text-lg">每一帧都是一个故事</p>
+          <p className="text-editorial-muted text-sm sm:text-base">
+            每一帧都是一个故事
+          </p>
         </div>
 
         <div className="relative max-w-6xl mx-auto">
-          <div className="absolute -left-12 top-0 bottom-0 w-8 film-perforation opacity-20" />
-          <div className="absolute -right-12 top-0 bottom-0 w-8 film-perforation opacity-20" />
+          <div className="absolute -left-12 top-0 bottom-0 w-8 film-perforation opacity-[0.12]" />
+          <div className="absolute -right-12 top-0 bottom-0 w-8 film-perforation opacity-[0.12]" />
 
-          <div
-            ref={containerRef}
-            className="relative overflow-hidden rounded-2xl bg-black/5 p-8"
+          <GlowCard
+            glowColor="accent"
+            customSize
+            className="w-full !p-0 !gap-0 min-h-[280px] border border-editorial-title/10 bg-editorial-card shadow-soft"
           >
+            <div
+              ref={containerRef}
+              className="relative overflow-hidden rounded-2xl p-6 sm:p-8"
+            >
             <AnimatePresence initial={false} custom={direction} mode="wait">
               <motion.div
                 key={currentIndex}
@@ -200,18 +210,21 @@ export function FilmRollGallery({ initialFrames }: FilmRollGalleryProps) {
             </AnimatePresence>
 
             <button
-              className="absolute left-2 top-1/2 -translate-y-1/2 p-3 bg-white/80 backdrop-blur-sm rounded-full shadow-soft hover:bg-white transition-colors z-10"
+              type="button"
+              className="absolute left-2 top-1/2 -translate-y-1/2 p-3 bg-editorial-card/95 backdrop-blur-sm rounded-full border border-editorial-title/10 shadow-soft hover:border-editorial-accent/30 transition-colors z-10"
               onClick={() => paginate(-1)}
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-6 h-6 text-editorial-title" />
             </button>
             <button
-              className="absolute right-2 top-1/2 -translate-y-1/2 p-3 bg-white/80 backdrop-blur-sm rounded-full shadow-soft hover:bg-white transition-colors z-10"
+              type="button"
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-3 bg-editorial-card/95 backdrop-blur-sm rounded-full border border-editorial-title/10 shadow-soft hover:border-editorial-accent/30 transition-colors z-10"
               onClick={() => paginate(1)}
             >
-              <ChevronRight className="w-6 h-6" />
+              <ChevronRight className="w-6 h-6 text-editorial-title" />
             </button>
           </div>
+          </GlowCard>
 
           <div className="mt-8 flex gap-2 overflow-x-auto pb-4 scrollbar-hide">
             {frames.map((frame, index) => (
@@ -225,8 +238,8 @@ export function FilmRollGallery({ initialFrames }: FilmRollGalleryProps) {
                   flex-shrink-0 w-20 h-24 rounded-lg overflow-hidden border-2 transition-all
                   ${
                     index === currentIndex
-                      ? "border-honeydew-400 scale-110 shadow-soft"
-                      : "border-white/50 hover:border-honeydew-200 opacity-60 hover:opacity-100"
+                      ? "border-editorial-accent scale-110 shadow-soft"
+                      : "border-editorial-title/15 hover:border-editorial-accent/40 opacity-60 hover:opacity-100"
                   }
                 `}
               >
@@ -254,8 +267,8 @@ export function FilmRollGallery({ initialFrames }: FilmRollGalleryProps) {
                   h-1 rounded-full transition-all
                   ${
                     index === currentIndex
-                      ? "w-8 bg-honeydew-400"
-                      : "w-4 bg-foreground/20 hover:bg-foreground/40"
+                      ? "w-8 bg-editorial-accent"
+                      : "w-4 bg-editorial-title/20 hover:bg-editorial-title/35"
                   }
                 `}
               />
@@ -311,8 +324,10 @@ function FilmFrameCard({
 
       <div className="space-y-6">
         <div>
-          <h3 className="text-3xl font-bold mb-2">{frame.title}</h3>
-          <p className="text-foreground/70 leading-relaxed">
+          <h3 className="text-2xl sm:text-3xl font-semibold text-editorial-title mb-2 tracking-tight">
+            {frame.title}
+          </h3>
+          <p className="text-editorial-body leading-relaxed text-[15px]">
             {frame.description}
           </p>
         </div>
@@ -321,21 +336,21 @@ function FilmFrameCard({
           {frame.details.map((detail, i) => (
             <motion.div
               key={i}
-              className="flex items-center gap-3 text-sm"
+              className="flex items-center gap-3 text-sm text-editorial-body"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.1 }}
             >
-              <div className="w-1.5 h-1.5 rounded-full bg-honeydew-400" />
+              <div className="w-1.5 h-1.5 rounded-full bg-editorial-accent/80 shrink-0" />
               <span>{detail}</span>
             </motion.div>
           ))}
         </div>
 
-        <button className="px-6 py-3 bg-honeydew-200 hover:bg-honeydew-300 rounded-lg font-semibold transition-colors flex items-center gap-2">
+        <span className="inline-flex items-center gap-2 text-sm font-medium text-editorial-muted">
           查看详情
           <ChevronRight className="w-4 h-4" />
-        </button>
+        </span>
       </div>
     </motion.div>
   );
@@ -385,18 +400,20 @@ function FilmFrameModal({
           </div>
         </div>
 
-        <div className="p-8 space-y-6">
-          <p className="text-lg text-foreground/80 leading-relaxed">
+        <div className="p-6 sm:p-8 space-y-6">
+          <p className="text-base text-editorial-body leading-relaxed">
             {frame.description}
           </p>
 
           <div>
-            <h4 className="font-semibold text-lg mb-3">核心亮点</h4>
+            <h4 className="font-semibold text-editorial-title text-sm uppercase tracking-wider mb-3">
+              核心亮点
+            </h4>
             <div className="grid gap-3">
               {frame.details.map((detail, i) => (
                 <div key={i} className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-honeydew-400 flex-shrink-0" />
-                  <span className="text-foreground/80">{detail}</span>
+                  <div className="w-1.5 h-1.5 rounded-full bg-editorial-accent flex-shrink-0" />
+                  <span className="text-editorial-body text-sm">{detail}</span>
                 </div>
               ))}
             </div>

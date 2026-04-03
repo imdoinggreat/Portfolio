@@ -4,33 +4,33 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 215 16% 27%;
+    --background: 240 100% 98%;
+    --foreground: 218 12% 34%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 215 16% 27%;
+    --card: 0 0% 99%;
+    --card-foreground: 218 18% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 215 16% 27%;
+    --popover-foreground: 218 18% 15%;
 
-    --primary: 158 48% 89%;
-    --primary-foreground: 158 46% 21%;
+    --primary: 239 82% 79%;
+    --primary-foreground: 218 18% 15%;
 
-    --secondary: 338 100% 95%;
-    --secondary-foreground: 338 47% 30%;
+    --secondary: 28 65% 72%;
+    --secondary-foreground: 218 18% 15%;
 
-    --muted: 39 100% 90%;
-    --muted-foreground: 39 36% 34%;
+    --muted: 240 20% 96%;
+    --muted-foreground: 218 10% 58%;
 
-    --accent: 158 48% 89%;
-    --accent-foreground: 158 46% 21%;
+    --accent: 239 82% 79%;
+    --accent-foreground: 218 18% 15%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 158 48% 89%;
-    --input: 158 48% 89%;
-    --ring: 158 48% 89%;
+    --border: 218 18% 15% / 0.08;
+    --input: 218 18% 15% / 0.12;
+    --ring: 239 82% 79%;
 
     --radius: 0.5rem;
   }
@@ -53,21 +53,21 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(213, 242, 232, 0.1);
+  background: rgba(158, 158, 244, 0.06);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(213, 242, 232, 0.5);
+  background: rgba(158, 158, 244, 0.25);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(213, 242, 232, 0.7);
+  background: rgba(158, 158, 244, 0.4);
 }
 
 /* 选中文本颜色 */
 ::selection {
-  background: rgba(213, 242, 232, 0.4);
+  background: rgba(158, 158, 244, 0.25);
   color: inherit;
 }
 
@@ -113,12 +113,12 @@
   background-position: 0 0;
 }
 
-/* 玻璃态效果增强 */
+/* 玻璃态 — editorial 统一浅底 */
 .glass-morphism {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px) saturate(180%);
-  -webkit-backdrop-filter: blur(10px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(252, 252, 252, 0.85);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  border: 1px solid rgba(30, 36, 48, 0.06);
 }
 
 /* Snowball loader — structure from CodePen (jkantner), scoped to avoid globals */

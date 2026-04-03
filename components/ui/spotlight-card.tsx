@@ -5,16 +5,15 @@ import { cn } from "@/lib/utils";
 
 /** Muted, editorial hues — avoid neon “gaming” defaults */
 const glowColorMap = {
+  /** Brand accent #9E9EF4 — default editorial spotlight */
+  accent: { base: 239, spread: 18 },
   blue: { base: 220, spread: 200 },
   purple: { base: 280, spread: 300 },
   green: { base: 120, spread: 200 },
   red: { base: 0, spread: 200 },
   orange: { base: 30, spread: 200 },
-  /** Soft mint — matches portfolio honeydew */
   honeydew: { base: 158, spread: 48 },
-  /** Cool neutral spotlight */
   stone: { base: 220, spread: 28 },
-  /** Restrained sage */
   sage: { base: 145, spread: 36 },
 } as const;
 
@@ -96,7 +95,7 @@ const beforeAfterStyles = `
 export function GlowCard({
   children,
   className = "",
-  glowColor = "honeydew",
+  glowColor = "accent",
   size = "md",
   width,
   height,

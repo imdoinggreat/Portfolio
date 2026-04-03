@@ -19,18 +19,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh-CN" className="scroll-smooth">
-      <body className={inter.className}>
-        <div className="fixed inset-0 -z-10">
-          <div className="absolute inset-0 bg-white" />
-          <div
-            className="absolute inset-0 opacity-60"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at center, #FFF991 0%, transparent 70%)",
-              mixBlendMode: "multiply",
-            }}
-          />
-        </div>
+      <body className={`${inter.className} bg-editorial-canvas text-editorial-body antialiased`}>
+        <div className="fixed inset-0 -z-10 bg-editorial-canvas" aria-hidden />
 
         <SiteHeader />
 

@@ -146,8 +146,8 @@ export function VerticalImageStack({
     <div
       className={
         embedded
-          ? "relative flex min-h-[min(90vh,820px)] w-full items-center justify-center overflow-hidden bg-gradient-to-b from-white via-honeydew-50/30 to-lychee-50/20 py-16"
-          : "relative flex h-screen w-full items-center justify-center overflow-hidden bg-gradient-to-b from-white via-honeydew-50/30 to-lychee-50/20"
+          ? "relative flex min-h-[min(90vh,820px)] w-full items-center justify-center overflow-hidden bg-gradient-to-b from-editorial-canvas via-editorial-canvas to-editorial-card py-16"
+          : "relative flex h-screen w-full items-center justify-center overflow-hidden bg-gradient-to-b from-editorial-canvas via-editorial-canvas to-editorial-card"
       }
     >
       <div
@@ -186,14 +186,14 @@ export function VerticalImageStack({
               }}
             >
               <div
-                className="relative h-[420px] w-[280px] overflow-hidden rounded-3xl ring-1 ring-honeydew-200/50 glass-morphism"
+                className="relative h-[420px] w-[280px] overflow-hidden rounded-3xl ring-1 ring-editorial-title/10 glass-morphism"
                 style={{
                   boxShadow: isCurrent
                     ? "0 25px 50px -12px rgba(213, 242, 232, 0.3), 0 0 0 1px rgba(213, 242, 232, 0.1)"
                     : "0 10px 30px -10px rgba(213, 242, 232, 0.2)",
                 }}
               >
-                <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-honeydew-100/20 via-transparent to-transparent" />
+                <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-editorial-accent/[0.06] via-transparent to-transparent" />
 
                 <Image
                   src={image.src}
@@ -240,8 +240,8 @@ export function VerticalImageStack({
             }}
             className={`h-2 w-2 rounded-full transition-all duration-300 ${
               index === currentIndex
-                ? "h-6 bg-honeydew-400"
-                : "bg-foreground/30 hover:bg-honeydew-300"
+                ? "h-6 bg-editorial-accent"
+                : "bg-editorial-title/25 hover:bg-editorial-accent/50"
             }`}
             aria-label={`Go to image ${index + 1}`}
           />
