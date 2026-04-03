@@ -2,9 +2,8 @@
 
 import { CareerTrajectory } from "@/components/career-trajectory";
 import { ContainerScroll } from "@/components/ui/container-scroll-animation";
-import { FallingPattern } from "@/components/ui/falling-pattern";
 import { GlowCard } from "@/components/ui/spotlight-card";
-import { VinylRecord } from "@/components/ui/vinyl-record";
+import { VerticalCutReveal } from "@/components/ui/vertical-cut-reveal";
 import type { HomeContent } from "@/lib/sanity/types";
 import { motion } from "framer-motion";
 import {
@@ -32,152 +31,129 @@ export function HomePageClient({ content }: HomePageClientProps) {
     <main className="min-h-screen w-full bg-editorial-canvas">
       {/* ── Hero ── */}
       <section className="min-h-screen flex items-center relative px-6 sm:px-10 overflow-hidden">
-        {/* Subtle paper texture + falling dots background */}
-        <FallingPattern
-          color="rgba(158,158,244,0.45)"
-          backgroundColor="#F8F8FF"
-          duration={200}
-          blurIntensity="0.9em"
-          density={1}
-          className="absolute inset-0 z-0 [mask-image:radial-gradient(ellipse_80%_80%_at_40%_50%,transparent_25%,#F8F8FF_70%)]"
-        />
-
-        {/* Warm spotlight from top-left */}
+        {/* Radial gradient background */}
         <div
-          className="absolute top-0 left-0 w-[60vw] h-[60vh] pointer-events-none z-0"
+          className="absolute inset-0 z-0"
           style={{
             background:
-              "radial-gradient(ellipse at 20% 10%, rgba(232,182,135,0.12) 0%, transparent 65%)",
+              "radial-gradient(125% 125% at 50% 10%, #fff 40%, #6366f1 100%)",
           }}
         />
 
-        {/* Inner layout: record left + text right on desktop, stacked on mobile */}
-        <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16 py-24 lg:py-0">
+        {/* Content */}
+        <div className="relative z-10 w-full max-w-5xl mx-auto py-24 flex flex-col gap-10">
 
-          {/* ── Vinyl record column ── */}
-          <motion.div
-            className="flex-shrink-0 flex justify-center lg:justify-start"
-            initial={{ opacity: 0, x: -24 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          {/* ── Greeting text ── */}
+          <h1
+            className="font-semibold text-editorial-title tracking-tight leading-tight"
+            style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
           >
-            <VinylRecord
-              name={content.heroName}
-              tagline="数据驱动 · 创意传播"
-              size="md"
-              className="lg:-translate-x-4"
-            />
+            <VerticalCutReveal
+              splitBy="characters"
+              staggerDuration={0.03}
+              staggerFrom="first"
+              transition={{ type: "spring", stiffness: 200, damping: 21 }}
+              containerClassName="block"
+            >
+              {"嗨👋你好呀"}
+            </VerticalCutReveal>
+            <VerticalCutReveal
+              splitBy="characters"
+              staggerDuration={0.03}
+              staggerFrom="last"
+              reverse
+              transition={{ type: "spring", stiffness: 200, damping: 21, delay: 0.4 }}
+              containerClassName="block"
+            >
+              {"我是张紫茹"}
+            </VerticalCutReveal>
+            <VerticalCutReveal
+              splitBy="characters"
+              staggerDuration={0.03}
+              staggerFrom="center"
+              transition={{ type: "spring", stiffness: 200, damping: 21, delay: 0.9 }}
+              containerClassName="block"
+            >
+              {"🌤️ 很高兴认识你！"}
+            </VerticalCutReveal>
+            <VerticalCutReveal
+              splitBy="characters"
+              staggerDuration={0.025}
+              staggerFrom="first"
+              transition={{ type: "spring", stiffness: 200, damping: 21, delay: 1.4 }}
+              containerClassName="block"
+            >
+              {"希望你可以通过这个网站"}
+            </VerticalCutReveal>
+            <VerticalCutReveal
+              splitBy="characters"
+              staggerDuration={0.03}
+              staggerFrom="last"
+              reverse
+              transition={{ type: "spring", stiffness: 200, damping: 21, delay: 1.9 }}
+              containerClassName="block"
+            >
+              {"😊 多了解我一点"}
+            </VerticalCutReveal>
+          </h1>
+
+          {/* ── CTA buttons ── */}
+          <motion.div
+            className="flex flex-col sm:flex-row gap-3 max-w-md"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 2.8, duration: 0.5 }}
+          >
+            <Link
+              href="/cases"
+              className="flex-1 py-3 px-5 rounded-xl font-medium flex items-center justify-center gap-2 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md text-white"
+              style={{
+                background: "linear-gradient(135deg, #1E2430 0%, #2d3444 100%)",
+                boxShadow: "0 2px 12px rgba(30,36,48,0.18)",
+              }}
+            >
+              <FileText className="w-4 h-4 shrink-0" />
+              查看代表项目
+            </Link>
+            <a
+              href={resumeHref}
+              download
+              className="flex-1 py-3 px-5 rounded-xl font-medium flex items-center justify-center gap-2 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-soft text-editorial-title"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.5) 100%)",
+                border: "1px solid rgba(99,102,241,0.25)",
+                boxShadow: "0 2px 8px rgba(99,102,241,0.1)",
+              }}
+            >
+              <Download className="w-4 h-4 shrink-0" />
+              {resumeLabel}
+            </a>
           </motion.div>
 
-          {/* ── Text column ── */}
-          <div className="flex flex-col items-center lg:items-start text-center lg:text-left gap-6 max-w-lg">
-
-            {/* Eyebrow */}
-            <motion.p
-              className="text-[10px] tracking-[0.3em] uppercase text-editorial-muted font-medium"
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15 }}
+          {/* Sub-links */}
+          <motion.div
+            className="flex items-center gap-5 text-sm text-editorial-muted"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 3.0 }}
+          >
+            <Link
+              href="#about"
+              className="inline-flex items-center gap-1.5 hover:text-editorial-accent transition-colors"
             >
-              Portfolio · 作品集
-            </motion.p>
-
-            {/* Name — primary visual anchor */}
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.25, duration: 0.6 }}
+              <UserRound className="w-3.5 h-3.5" />
+              了解我
+            </Link>
+            <span className="text-editorial-muted/30" aria-hidden>·</span>
+            <Link
+              href="#contact"
+              className="inline-flex items-center gap-1.5 hover:text-editorial-accent transition-colors"
             >
-              <h1
-                className="font-semibold tracking-tight text-editorial-title leading-none"
-                style={{ fontSize: "clamp(2.6rem, 6vw, 4rem)" }}
-              >
-                {content.heroName}
-              </h1>
-              <p className="mt-3 text-base sm:text-lg text-editorial-body leading-relaxed">
-                {content.heroTagline}
-              </p>
-            </motion.div>
-
-            {/* Horizontal keyword chips */}
-            {content.heroKeywordChips.length > 0 && (
-              <motion.div
-                className="flex flex-wrap justify-center lg:justify-start gap-2"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.38 }}
-                aria-label="职业关键词"
-              >
-                {content.heroKeywordChips.map((chip) => (
-                  <span
-                    key={chip}
-                    className="text-[11px] sm:text-xs px-3 py-1.5 rounded-full border border-editorial-accent/25 bg-white/70 text-editorial-body font-medium tracking-wide backdrop-blur-sm shadow-sm hover:border-editorial-accent/50 hover:bg-white transition-all duration-200"
-                  >
-                    {chip}
-                  </span>
-                ))}
-              </motion.div>
-            )}
-
-            {/* CTA buttons — styled with gradients */}
-            <motion.div
-              className="flex flex-col sm:flex-row gap-3 w-full"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <Link
-                href="/cases"
-                className="flex-1 py-3 px-5 rounded-xl font-medium flex items-center justify-center gap-2 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md text-white"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #1E2430 0%, #2d3444 100%)",
-                  boxShadow: "0 2px 12px rgba(30,36,48,0.18)",
-                }}
-              >
-                <FileText className="w-4 h-4 shrink-0" />
-                查看代表项目
-              </Link>
-              <a
-                href={resumeHref}
-                download
-                className="flex-1 py-3 px-5 rounded-xl font-medium flex items-center justify-center gap-2 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-soft text-editorial-title"
-                style={{
-                  background:
-                    "linear-gradient(135deg, rgba(158,158,244,0.12) 0%, rgba(232,182,135,0.1) 100%)",
-                  border: "1px solid rgba(158,158,244,0.3)",
-                  boxShadow: "0 2px 8px rgba(158,158,244,0.08)",
-                }}
-              >
-                <Download className="w-4 h-4 shrink-0" />
-                {resumeLabel}
-              </a>
-            </motion.div>
-
-            {/* Sub-links */}
-            <motion.div
-              className="flex items-center gap-5 text-sm text-editorial-muted"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.65 }}
-            >
-              <Link
-                href="#about"
-                className="inline-flex items-center gap-1.5 hover:text-editorial-accent transition-colors"
-              >
-                <UserRound className="w-3.5 h-3.5" />
-                了解我
-              </Link>
-              <span className="text-editorial-muted/30" aria-hidden>·</span>
-              <Link
-                href="#contact"
-                className="inline-flex items-center gap-1.5 hover:text-editorial-accent transition-colors"
-              >
-                <Mail className="w-3.5 h-3.5" />
-                联系我
-              </Link>
-            </motion.div>
-          </div>
+              <Mail className="w-3.5 h-3.5" />
+              联系我
+            </Link>
+          </motion.div>
         </div>
 
         {/* Scroll hint */}
