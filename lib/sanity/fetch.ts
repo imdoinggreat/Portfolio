@@ -1,4 +1,5 @@
 import { groq } from "next-sanity";
+import { draftMode } from "next/headers";
 import type { Image } from "sanity";
 import {
   defaultCaseStudies,
@@ -198,23 +199,34 @@ function mapPhotography(rows: RawPhoto[] | null): PhotographyItem[] {
   return out.length ? out : defaultPhotography;
 }
 
+async function getDraftToken(): Promise<string | undefined> {
+  const { isEnabled } = await draftMode();
+  return isEnabled ? process.env.SANITY_API_READ_TOKEN : undefined;
+}
+
 export async function getHomeContent(): Promise<HomeContent> {
-  const client = getSanityClient();
+  const token = await getDraftToken();
+  const client = getSanityClient(token);
   if (!client) return defaultHomeContent;
-  const raw = await client.fetch<RawSite>(siteSettingsQuery);
+  const perspective = token ? "previewDrafts" : "published";
+  const raw = await client.fetch<RawSite>(siteSettingsQuery, {}, { perspective });
   return mergeHome(raw);
 }
 
 export async function getCaseStudies(): Promise<CaseStudyFrame[]> {
-  const client = getSanityClient();
+  const token = await getDraftToken();
+  const client = getSanityClient(token);
   if (!client) return defaultCaseStudies;
-  const rows = await client.fetch<RawCase[] | null>(caseStudiesQuery);
+  const perspective = token ? "previewDrafts" : "published";
+  const rows = await client.fetch<RawCase[] | null>(caseStudiesQuery, {}, { perspective });
   return mapCaseStudies(rows);
 }
 
 export async function getPhotographySlides(): Promise<PhotographyItem[]> {
-  const client = getSanityClient();
+  const token = await getDraftToken();
+  const client = getSanityClient(token);
   if (!client) return defaultPhotography;
-  const rows = await client.fetch<RawPhoto[] | null>(photographyQuery);
+  const perspective = token ? "previewDrafts" : "published";
+  const rows = await client.fetch<RawPhoto[] | null>(photographyQuery, {}, { perspective });
   return mapPhotography(rows);
 }

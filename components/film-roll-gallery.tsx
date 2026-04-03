@@ -7,7 +7,7 @@ import {
   useMotionValue,
   useTransform,
 } from "framer-motion";
-import { ChevronLeft, ChevronRight, Camera, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Monitor, X } from "lucide-react";
 import Image from "next/image";
 import { GlowCard } from "@/components/ui/spotlight-card";
 
@@ -149,14 +149,11 @@ export function FilmRollGallery({ initialFrames }: FilmRollGalleryProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Camera className="w-7 h-7 sm:w-8 sm:h-8 text-editorial-accent" />
+            <Monitor className="w-7 h-7 sm:w-8 sm:h-8 text-editorial-accent" />
             <h2 className="text-3xl sm:text-4xl font-semibold text-editorial-title tracking-tight">
-              作品胶卷
+              作品集
             </h2>
           </motion.div>
-          <p className="text-editorial-muted text-sm sm:text-base">
-            每一帧都是一个故事
-          </p>
         </div>
 
         <div className="relative max-w-6xl mx-auto">

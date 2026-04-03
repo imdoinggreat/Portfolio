@@ -169,7 +169,7 @@ export function HomePageClient({ content }: HomePageClientProps) {
                 className="font-semibold text-editorial-title tracking-tight leading-tight"
                 style={{ fontSize: "clamp(2rem, 5vw, 3.2rem)" }}
               >
-                用数据讲好每一个故事
+                AI native ｜人文关怀
               </h2>
               <p className="text-editorial-body text-base max-w-md">
                 从洞察到落地，从策略到转化
@@ -348,7 +348,7 @@ export function HomePageClient({ content }: HomePageClientProps) {
             <div className="flex items-center justify-center gap-3 pt-1">
               {/* GitHub */}
               <a
-                href="https://github.com/YOUR_GITHUB_USERNAME"
+                href="https://github.com/imdoinggreat"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GitHub"

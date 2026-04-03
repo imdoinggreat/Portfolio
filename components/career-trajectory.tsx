@@ -34,7 +34,7 @@ const nodes: CareerNode[] = [
     logoColor: "#3370FF",
     date: "Sep–Dec 2025",
     role: "To B 营销 · 触达与转化",
-    valueSummary: "CRM + KDM 策略优化商学院场景触达与留资效率",
+    valueSummary: "主导北大国发院/清华商学院圈层营销，策划「AI亲子营」差异化活动，搭建部门首个CRM系统(0→1)",
     metric: "500+ KDM · 留资率 20%",
     caseSlug: "feishu-b2b",
     content: {
@@ -56,8 +56,8 @@ const nodes: CareerNode[] = [
     logoColor: "#FF6B35",
     date: "2024",
     role: "用户研究 · 全案策划",
-    valueSummary: "用互动机制提升年轻用户参与与留资转化路径",
-    metric: "35% 触达效率提升（课程内）",
+    valueSummary: "设计职业体验互动游戏，解决年轻求职者「不知道工作是什么样」的核心痛点",
+    metric: "全年级答辩二等奖 · 方案被推荐给合作企业",
     caseSlug: "boss-gamification",
     content: {
       description:
@@ -163,7 +163,7 @@ export function CareerTrajectory() {
           Career trajectory · Selected experience
         </p>
         <h2 className="text-3xl sm:text-4xl font-semibold text-editorial-title tracking-tight mb-4">
-          职业路径 / 关键节点
+          职业路径
         </h2>
         <p className="text-sm sm:text-base text-editorial-body leading-relaxed">
           悬停展开卡片 · 点击查看完整详情
@@ -252,9 +252,6 @@ export function CareerTrajectory() {
                       </h3>
                       <p className="text-[11px] text-editorial-muted">{node.subtitle}</p>
                     </div>
-                    <time className="text-[10px] font-mono tabular-nums text-editorial-muted shrink-0">
-                      {node.date}
-                    </time>
                   </div>
 
                   <p className="text-[11px] text-editorial-accent font-medium mb-2 leading-snug">
@@ -316,9 +313,6 @@ export function CareerTrajectory() {
                 <h3 className="text-sm font-semibold text-editorial-title">{node.title}</h3>
                 <p className="text-[11px] text-editorial-muted">{node.subtitle}</p>
               </div>
-              <time className="text-[10px] font-mono tabular-nums text-editorial-muted shrink-0">
-                {node.date}
-              </time>
             </div>
             <p className="text-[11px] text-editorial-accent font-medium mb-2">{node.role}</p>
             <p className="text-sm text-editorial-body leading-relaxed line-clamp-2">{node.valueSummary}</p>
@@ -388,12 +382,9 @@ function NodeDetailModal({
                 <p className="text-sm text-editorial-title mt-3 font-medium leading-snug">
                   {node.valueSummary}
                 </p>
-                <div className="flex flex-wrap items-center gap-2 mt-3">
-                  <span className="text-xs font-mono text-editorial-muted">{node.date}</span>
-                  {node.metric && (
-                    <span className="text-xs text-editorial-body">{node.metric}</span>
-                  )}
-                </div>
+                {node.metric && (
+                  <p className="text-xs text-editorial-body mt-3">{node.metric}</p>
+                )}
               </div>
             </div>
             <button

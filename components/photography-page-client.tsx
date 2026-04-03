@@ -27,10 +27,6 @@ export function PhotographyPageClient({ slides }: PhotographyPageClientProps) {
           }}
         />
 
-        <p className="absolute top-8 left-1/2 -translate-x-1/2 z-20 text-xs tracking-[0.25em] uppercase text-editorial-muted font-mono select-none">
-          Interactive canvas
-        </p>
-
         <div className="absolute inset-0 pt-14 pb-6">
           <StackedPanels />
         </div>

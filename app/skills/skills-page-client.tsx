@@ -56,7 +56,7 @@ export function SkillsPageClient() {
             我会用的工具
           </h1>
           <p className="text-sm sm:text-base text-editorial-body max-w-lg mx-auto leading-relaxed">
-            数据驱动的营销思维 × 创意执行能力 — 从洞察到呈现，全链路可落地。
+            营销思维 × 数据驱动 × 创意执行
           </p>
         </motion.div>
       </section>
@@ -70,9 +70,6 @@ export function SkillsPageClient() {
         >
           <OrbitingSkills />
         </motion.div>
-        <p className="text-xs text-editorial-muted text-center">
-          悬停图标暂停动画 · 内圈：数据工具 · 外圈：创意工具
-        </p>
       </section>
 
       {/* Skill groups */}
